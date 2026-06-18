@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { SignOutButton } from "@/components/admin/SignOutButton";
 import { SessionProvider } from "@/components/providers/SessionProvider";
 import { auth } from "@/lib/auth";
 
@@ -24,12 +25,18 @@ export default async function AdminLayout({
                   <Link href="/admin" className="hover:text-[#F5F5F7]">
                     Dashboard
                   </Link>
+                  <Link href="/admin/collections" className="hover:text-[#F5F5F7]">
+                    Collections
+                  </Link>
                   <Link href="/" className="hover:text-[#F5F5F7]">
                     View site
                   </Link>
                 </nav>
               </div>
-              <p className="text-sm text-[#A1A1A6]">{session.user?.email}</p>
+              <div className="flex items-center gap-4">
+                <p className="text-sm text-[#A1A1A6]">{session.user?.email}</p>
+                <SignOutButton />
+              </div>
             </div>
           </header>
         ) : null}
