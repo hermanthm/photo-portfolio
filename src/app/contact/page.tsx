@@ -1,9 +1,19 @@
+import type { Metadata } from "next";
+
 import { SocialLinks } from "@/components/layout/SocialLinks";
 import { getSiteSettings } from "@/lib/site";
 
-export const metadata = {
-  title: "Contact",
-};
+const DEFAULT_CONTACT_BLURB =
+  "Reach out to discuss photography or film projects.";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings();
+
+  return {
+    title: "Contact",
+    description: settings.contactBlurb ?? DEFAULT_CONTACT_BLURB,
+  };
+}
 
 export default async function ContactPage() {
   const settings = await getSiteSettings();
@@ -14,7 +24,7 @@ export default async function ContactPage() {
         Contact
       </h1>
       <p className="mt-8 text-lg leading-relaxed text-[#A1A1A6]">
-        Reach out to discuss photography or film projects.
+        {settings.contactBlurb ?? DEFAULT_CONTACT_BLURB}
       </p>
 
       {settings.contactEmail ? (

@@ -82,12 +82,14 @@ model Video {
 }
 
 model SiteSettings {
-  id           String   @id @default("default")
-  siteTitle    String   @default("Photo Portfolio")
-  bio          String?
-  contactEmail String?
-  instagram    String?
-  vimeo        String?
-  youtube      String?
-  updatedAt    DateTime @updatedAt
+  id            String   @id @default("default")
+  siteTitle     String   @default("Photo Portfolio")
+  bio           String?
+  footerTagline String?
+  contactBlurb  String?
+  contactEmail  String?
+  instagram     String?
+  vimeo         String?
+  youtube       String?
+  updatedAt     DateTime @updatedAt
 }

@@ -1,8 +1,16 @@
+import type { Metadata } from "next";
+
+import { getSiteDescription } from "@/lib/seo";
 import { getSiteSettings } from "@/lib/site";
 
-export const metadata = {
-  title: "About",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings();
+
+  return {
+    title: "About",
+    description: getSiteDescription(settings),
+  };
+}
 
 export default async function AboutPage() {
   const settings = await getSiteSettings();

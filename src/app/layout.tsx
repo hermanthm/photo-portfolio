@@ -1,8 +1,8 @@
-import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
+import { buildSiteMetadata } from "@/lib/seo";
 import { getSiteSettings } from "@/lib/site";
 
 import "./globals.css";
@@ -17,18 +17,9 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata() {
   const settings = await getSiteSettings();
-
-  return {
-    title: {
-      default: settings.siteTitle,
-      template: `%s | ${settings.siteTitle}`,
-    },
-    description:
-      settings.bio ??
-      "Personal photography and cinematic video portfolio.",
-  };
+  return buildSiteMetadata(settings);
 }
 
 export default async function RootLayout({
@@ -48,7 +39,7 @@ export default async function RootLayout({
         <div className="flex-1">{children}</div>
         <Footer
           siteTitle={settings.siteTitle}
-          bio={settings.bio}
+          footerTagline={settings.footerTagline}
           instagram={settings.instagram}
           vimeo={settings.vimeo}
           youtube={settings.youtube}

@@ -1,11 +1,17 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
-import { getPublishedCollections } from "@/lib/site";
+import { getPublishedCollections, getSiteSettings } from "@/lib/site";
 
-export const metadata = {
-  title: "Video",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings();
+
+  return {
+    title: "Video",
+    description: `Films and video work by ${settings.siteTitle}. Watch embedded films from YouTube and Vimeo.`,
+  };
+}
 
 export default async function VideoPage() {
   const collections = await getPublishedCollections();

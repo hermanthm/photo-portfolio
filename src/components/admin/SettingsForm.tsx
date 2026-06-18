@@ -6,6 +6,8 @@ import { FormEvent, useState } from "react";
 type SettingsFormValues = {
   siteTitle: string;
   bio: string;
+  footerTagline: string;
+  contactBlurb: string;
   contactEmail: string;
   instagram: string;
   vimeo: string;
@@ -43,6 +45,8 @@ export function SettingsForm({ initialValues }: SettingsFormProps) {
       body: JSON.stringify({
         siteTitle: values.siteTitle,
         bio: values.bio.trim() || null,
+        footerTagline: values.footerTagline.trim() || null,
+        contactBlurb: values.contactBlurb.trim() || null,
         contactEmail: values.contactEmail.trim() || null,
         instagram: values.instagram.trim() || null,
         vimeo: values.vimeo.trim() || null,
@@ -89,6 +93,31 @@ export function SettingsForm({ initialValues }: SettingsFormProps) {
         <span className="text-xs text-[#A1A1A6]">
           Used on the homepage hero and About page.
         </span>
+      </label>
+
+      <label className="block space-y-2">
+        <span className="text-sm text-[#A1A1A6]">Footer tagline</span>
+        <input
+          type="text"
+          value={values.footerTagline}
+          onChange={(event) => updateField("footerTagline", event.target.value)}
+          placeholder="Photography and cinematic video work."
+          className="w-full rounded-xl border border-neutral-800 bg-[#0F0F0F] px-4 py-3 text-[#F5F5F7] outline-none transition focus:border-[#C8A97E]"
+        />
+        <span className="text-xs text-[#A1A1A6]">
+          Short line shown in the site footer.
+        </span>
+      </label>
+
+      <label className="block space-y-2">
+        <span className="text-sm text-[#A1A1A6]">Contact page intro</span>
+        <textarea
+          value={values.contactBlurb}
+          onChange={(event) => updateField("contactBlurb", event.target.value)}
+          rows={3}
+          placeholder="Reach out to discuss photography or film projects."
+          className="w-full rounded-xl border border-neutral-800 bg-[#0F0F0F] px-4 py-3 text-[#F5F5F7] outline-none transition focus:border-[#C8A97E]"
+        />
       </label>
 
       <label className="block space-y-2">

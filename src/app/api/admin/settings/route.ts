@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
 import { requireAuth } from "@/lib/auth-guard";
@@ -27,5 +28,10 @@ export async function PATCH(request: Request) {
   }
 
   const settings = await updateSiteSettings(parsed.data);
+
+  for (const path of ["/", "/about", "/contact", "/photography", "/video"]) {
+    revalidatePath(path);
+  }
+
   return NextResponse.json(settings);
 }

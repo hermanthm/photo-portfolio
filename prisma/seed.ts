@@ -58,12 +58,16 @@ async function main() {
     update: {
       siteTitle: "Herman Tong — Photography & Film",
       bio: "Visual storyteller capturing landscapes, portraits, and cinematic motion.",
+      footerTagline: "Photography and cinematic video work.",
+      contactBlurb: "Reach out to discuss photography or film projects.",
       contactEmail: adminEmail,
     },
     create: {
       id: "default",
       siteTitle: "Herman Tong — Photography & Film",
       bio: "Visual storyteller capturing landscapes, portraits, and cinematic motion.",
+      footerTagline: "Photography and cinematic video work.",
+      contactBlurb: "Reach out to discuss photography or film projects.",
       contactEmail: adminEmail,
       instagram: "https://instagram.com/",
       vimeo: "https://vimeo.com/",

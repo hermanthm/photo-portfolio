@@ -38,6 +38,8 @@ export default async function AdminSettingsPage() {
         initialValues={{
           siteTitle: settings.siteTitle,
           bio: settings.bio ?? "",
+          footerTagline: settings.footerTagline ?? "",
+          contactBlurb: settings.contactBlurb ?? "",
           contactEmail: settings.contactEmail ?? "",
           instagram: settings.instagram ?? "",
           vimeo: settings.vimeo ?? "",

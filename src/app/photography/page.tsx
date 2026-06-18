@@ -1,9 +1,16 @@
-import { CollectionPreview } from "@/components/gallery/CollectionPreview";
-import { getPublishedCollections } from "@/lib/site";
+import type { Metadata } from "next";
 
-export const metadata = {
-  title: "Photography",
-};
+import { CollectionPreview } from "@/components/gallery/CollectionPreview";
+import { getPublishedCollections, getSiteSettings } from "@/lib/site";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings();
+
+  return {
+    title: "Photography",
+    description: `Photo collections by ${settings.siteTitle}. Browse work in fullscreen slideshows.`,
+  };
+}
 
 export default async function PhotographyPage() {
   const collections = await getPublishedCollections();
