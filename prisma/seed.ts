@@ -2,13 +2,13 @@ import "dotenv/config";
 
 import { PrismaPg } from "@prisma/adapter-pg";
 import bcrypt from "bcryptjs";
-import { Pool } from "pg";
 
+import { createPgPool } from "../src/lib/pg-pool";
 import { PrismaClient } from "../src/generated/prisma/client";
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
+const pool = createPgPool(
+  process.env.MIGRATE_DATABASE_URL ?? process.env.DATABASE_URL,
+);
 const adapter = new PrismaPg(pool);
 const db = new PrismaClient({ adapter });
 
