@@ -1,14 +1,15 @@
 import "dotenv/config";
 
-import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
+import { PrismaPg } from "@prisma/adapter-pg";
 import bcrypt from "bcryptjs";
+import { Pool } from "pg";
 
 import { PrismaClient } from "../src/generated/prisma/client";
 
-const adapter = new PrismaBetterSqlite3({
-  url: process.env.DATABASE_URL ?? "file:./dev.db",
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
 });
-
+const adapter = new PrismaPg(pool);
 const db = new PrismaClient({ adapter });
 
 const PLACEHOLDER_PHOTOS = [
@@ -191,4 +192,5 @@ main()
   })
   .finally(async () => {
     await db.$disconnect();
+    await pool.end();
   });
