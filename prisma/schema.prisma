@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+enum CollectionType {
+  photo
+  video
+  mixed
+}
+
+enum DefaultView {
+  mosaic
+  slideshow
+}
+
+enum VideoProvider {
+  youtube
+  vimeo
+  other
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Collection {
+  id          String         @id @default(cuid())
+  slug        String         @unique
+  title       String
+  description String?
+  type        CollectionType @default(mixed)
+  defaultView DefaultView    @default(mosaic)
+  published   Boolean        @default(false)
+  featured    Boolean        @default(false)
+  sortOrder   Int            @default(0)
+  photos      Photo[]
+  videos      Video[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+}
+
+model Photo {
+  id           String     @id @default(cuid())
+  collectionId String
+  collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  cloudinaryId String?
+  url          String
+  alt          String?
+  width        Int        @default(0)
+  height       Int        @default(0)
+  sortOrder    Int        @default(0)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@index([collectionId])
+}
+
+model Video {
+  id           String        @id @default(cuid())
+  collectionId String
+  collection   Collection    @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  title        String
+  description  String?
+  embedUrl     String
+  provider     VideoProvider @default(other)
+  thumbnailUrl String?
+  sortOrder    Int           @default(0)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([collectionId])
+}
+
+model SiteSettings {
+  id           String   @id @default("default")
+  siteTitle    String   @default("Photo Portfolio")
+  bio          String?
+  contactEmail String?
+  instagram    String?
+  vimeo        String?
+  youtube      String?
+  updatedAt    DateTime @updatedAt
+}
