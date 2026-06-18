@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 
+import { CollectionPreview } from "@/components/gallery/CollectionPreview";
 import { getPublishedCollections, getSiteSettings } from "@/lib/site";
 
 export default async function HomePage() {
@@ -54,51 +54,26 @@ export default async function HomePage() {
                 Featured work
               </h2>
               <p className="mt-3 text-[#A1A1A6]">
-                Mosaic and slideshow views arrive in Phase 3.
+                Explore collections in fullscreen slideshow view.
               </p>
             </div>
           </div>
 
           <div className="grid gap-8 md:grid-cols-2">
-            {featured.map((collection) => {
-              const cover =
-                collection.photos[0]?.url ?? collection.videos[0]?.thumbnailUrl;
-
-              return (
-                <Link
-                  key={collection.id}
-                  href={`/work/${collection.slug}`}
-                  className="group overflow-hidden rounded-3xl border border-neutral-800/50 bg-[#111111] transition hover:border-[#C8A97E]/30"
-                >
-                  <div className="relative aspect-[16/10] overflow-hidden bg-[#1A1A1A]">
-                    {cover ? (
-                      <Image
-                        src={cover}
-                        alt={collection.title}
-                        fill
-                        className="object-cover transition duration-500 group-hover:scale-105"
-                        sizes="(max-width: 768px) 100vw, 50vw"
-                      />
-                    ) : (
-                      <div className="flex h-full items-center justify-center text-[#C8A97E]">
-                        No cover yet
-                      </div>
-                    )}
-                  </div>
-                  <div className="p-8">
-                    <p className="mb-2 text-sm uppercase tracking-[0.15em] text-[#C8A97E]">
-                      {collection.type}
-                    </p>
-                    <h3 className="text-2xl font-medium text-[#F5F5F7]">
-                      {collection.title}
-                    </h3>
-                    <p className="mt-3 text-[#A1A1A6]">
-                      {collection.description}
-                    </p>
-                  </div>
-                </Link>
-              );
-            })}
+            {featured.map((collection) => (
+              <CollectionPreview
+                key={collection.id}
+                slug={collection.slug}
+                title={collection.title}
+                description={collection.description}
+                type={collection.type}
+                photos={collection.photos}
+                coverUrl={
+                  collection.photos[0]?.url ??
+                  collection.videos[0]?.thumbnailUrl
+                }
+              />
+            ))}
           </div>
         </div>
       </section>

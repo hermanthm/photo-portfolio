@@ -52,7 +52,7 @@ export default async function EditCollectionPage({
           slug: collection.slug,
           description: collection.description ?? "",
           type: collection.type,
-          defaultView: collection.defaultView,
+          defaultView: "slideshow",
           published: collection.published,
           featured: collection.featured,
           sortOrder: collection.sortOrder,

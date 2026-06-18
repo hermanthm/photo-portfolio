@@ -9,7 +9,7 @@ export const collectionSchema = z.object({
     .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Slug must be lowercase letters, numbers, and hyphens"),
   description: z.string().max(500).optional().nullable(),
   type: z.enum(["photo", "video", "mixed"]),
-  defaultView: z.enum(["mosaic", "slideshow"]),
+  defaultView: z.enum(["slideshow"]).default("slideshow"),
   published: z.boolean(),
   featured: z.boolean(),
   sortOrder: z.number().int().min(0),

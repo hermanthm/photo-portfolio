@@ -29,3 +29,4 @@ body {
 ::selection {
   background: color-mix(in srgb, var(--accent) 35%, transparent);
 }
+

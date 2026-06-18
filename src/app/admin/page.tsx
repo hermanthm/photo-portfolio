@@ -29,10 +29,10 @@ export default async function AdminDashboardPage() {
       </div>
 
       <div className="mt-12 rounded-3xl border border-neutral-800 bg-[#111111] p-8">
-        <h2 className="mb-3 text-2xl font-medium">Phase 2 ready</h2>
+        <h2 className="mb-3 text-2xl font-medium">Portfolio complete</h2>
         <p className="mb-6 max-w-2xl text-[#A1A1A6]">
-          Manage collections, upload photos to Cloudinary, and add videos from
-          YouTube or Vimeo. Mosaic and slideshow views arrive in Phase 3.
+          Manage collections, upload photos, add videos, and control how each
+          collection displays on the public site in slideshow view.
         </p>
         <div className="flex flex-wrap gap-4 text-sm">
           <Link

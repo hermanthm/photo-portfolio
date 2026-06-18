@@ -10,7 +10,7 @@ type CollectionFormValues = {
   slug: string;
   description: string;
   type: "photo" | "video" | "mixed";
-  defaultView: "mosaic" | "slideshow";
+  defaultView: "slideshow";
   published: boolean;
   featured: boolean;
   sortOrder: number;
@@ -27,7 +27,7 @@ const defaultValues: CollectionFormValues = {
   slug: "",
   description: "",
   type: "mixed",
-  defaultView: "mosaic",
+  defaultView: "slideshow",
   published: false,
   featured: false,
   sortOrder: 0,
@@ -69,6 +69,7 @@ export function CollectionForm({
 
     const payload = {
       ...values,
+      defaultView: "slideshow" as const,
       description: values.description.trim() || null,
     };
 
@@ -135,7 +136,7 @@ export function CollectionForm({
         />
       </label>
 
-      <div className="grid gap-6 md:grid-cols-3">
+      <div className="grid gap-6 md:grid-cols-2">
         <label className="block space-y-2">
           <span className="text-sm text-[#A1A1A6]">Type</span>
           <select
@@ -148,23 +149,6 @@ export function CollectionForm({
             <option value="photo">Photo</option>
             <option value="video">Video</option>
             <option value="mixed">Mixed</option>
-          </select>
-        </label>
-
-        <label className="block space-y-2">
-          <span className="text-sm text-[#A1A1A6]">Default view</span>
-          <select
-            value={values.defaultView}
-            onChange={(event) =>
-              updateField(
-                "defaultView",
-                event.target.value as CollectionFormValues["defaultView"],
-              )
-            }
-            className="w-full rounded-xl border border-neutral-800 bg-[#0F0F0F] px-4 py-3 text-[#F5F5F7] outline-none transition focus:border-[#C8A97E]"
-          >
-            <option value="mosaic">Mosaic</option>
-            <option value="slideshow">Slideshow</option>
           </select>
         </label>
 
