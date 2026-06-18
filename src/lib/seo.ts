@@ -4,6 +4,7 @@ type SiteSettingsForSeo = {
   siteTitle: string;
   bio: string | null;
   footerTagline: string | null;
+  ogImageUrl: string | null;
 };
 
 const DEFAULT_DESCRIPTION =
@@ -29,11 +30,13 @@ export function buildSiteMetadata(
       title: settings.siteTitle,
       description,
       type: "website",
+      ...(settings.ogImageUrl ? { images: [{ url: settings.ogImageUrl }] } : {}),
     },
     twitter: {
       card: "summary_large_image",
       title: settings.siteTitle,
       description,
+      ...(settings.ogImageUrl ? { images: [settings.ogImageUrl] } : {}),
     },
     ...overrides,
   };

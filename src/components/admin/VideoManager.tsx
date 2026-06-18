@@ -3,6 +3,8 @@
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 
+import { ReorderButtons } from "@/components/admin/ReorderButtons";
+
 type VideoItem = {
   id: string;
   title: string;
@@ -57,6 +59,43 @@ export function VideoManager({ collectionId, initialVideos }: VideoManagerProps)
     setUrl("");
     setDescription("");
     router.refresh();
+  }
+
+  async function persistOrder(nextVideos: VideoItem[]) {
+    const response = await fetch("/api/admin/videos/reorder", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        collectionId,
+        videoIds: nextVideos.map((video) => video.id),
+      }),
+    });
+
+    if (!response.ok) {
+      setError("Failed to reorder videos.");
+      return false;
+    }
+
+    setVideos(nextVideos.map((video, index) => ({ ...video, sortOrder: index })));
+    router.refresh();
+    return true;
+  }
+
+  async function moveVideo(videoId: string, direction: -1 | 1) {
+    const index = videos.findIndex((video) => video.id === videoId);
+    const targetIndex = index + direction;
+
+    if (index < 0 || targetIndex < 0 || targetIndex >= videos.length) {
+      return;
+    }
+
+    const nextVideos = [...videos];
+    [nextVideos[index], nextVideos[targetIndex]] = [
+      nextVideos[targetIndex],
+      nextVideos[index],
+    ];
+
+    await persistOrder(nextVideos);
   }
 
   async function handleDelete(videoId: string) {
@@ -131,12 +170,18 @@ export function VideoManager({ collectionId, initialVideos }: VideoManagerProps)
         <p className="text-[#A1A1A6]">No videos yet.</p>
       ) : (
         <div className="space-y-4">
-          {videos.map((video) => (
+          {videos.map((video, index) => (
             <div
               key={video.id}
-              className="flex flex-col gap-4 rounded-3xl border border-neutral-800 bg-[#111111] p-6 md:flex-row md:items-start md:justify-between"
+              className="flex flex-col gap-4 rounded-3xl border border-neutral-800 bg-[#111111] p-6 md:flex-row md:items-start"
             >
-              <div>
+              <ReorderButtons
+                onMoveUp={() => moveVideo(video.id, -1)}
+                onMoveDown={() => moveVideo(video.id, 1)}
+                disableUp={index === 0}
+                disableDown={index === videos.length - 1}
+              />
+              <div className="flex-1">
                 <h3 className="text-lg font-medium text-[#F5F5F7]">{video.title}</h3>
                 <p className="mt-1 text-sm text-[#A1A1A6]">
                   {video.provider} · sort {video.sortOrder}
@@ -147,13 +192,15 @@ export function VideoManager({ collectionId, initialVideos }: VideoManagerProps)
                 <p className="mt-3 break-all text-sm text-[#C8A97E]">{video.embedUrl}</p>
               </div>
 
-              <button
-                type="button"
-                onClick={() => handleDelete(video.id)}
-                className="h-fit rounded-xl border border-red-500/40 px-4 py-2 text-sm text-red-300 transition hover:bg-red-500/10"
-              >
-                Delete
-              </button>
+              <div className="flex flex-col gap-2 md:items-end">
+                <button
+                  type="button"
+                  onClick={() => handleDelete(video.id)}
+                  className="h-fit rounded-xl border border-red-500/40 px-4 py-2 text-sm text-red-300 transition hover:bg-red-500/10"
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           ))}
         </div>

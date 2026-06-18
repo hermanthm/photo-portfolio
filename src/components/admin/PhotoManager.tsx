@@ -4,6 +4,8 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
 
+import { ReorderButtons } from "@/components/admin/ReorderButtons";
+
 type PhotoItem = {
   id: string;
   url: string;
@@ -76,6 +78,43 @@ export function PhotoManager({
     router.refresh();
   }
 
+  async function persistOrder(nextPhotos: PhotoItem[]) {
+    const response = await fetch("/api/admin/photos/reorder", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        collectionId,
+        photoIds: nextPhotos.map((photo) => photo.id),
+      }),
+    });
+
+    if (!response.ok) {
+      setError("Failed to reorder photos.");
+      return false;
+    }
+
+    setPhotos(nextPhotos.map((photo, index) => ({ ...photo, sortOrder: index })));
+    router.refresh();
+    return true;
+  }
+
+  async function movePhoto(photoId: string, direction: -1 | 1) {
+    const index = photos.findIndex((photo) => photo.id === photoId);
+    const targetIndex = index + direction;
+
+    if (index < 0 || targetIndex < 0 || targetIndex >= photos.length) {
+      return;
+    }
+
+    const nextPhotos = [...photos];
+    [nextPhotos[index], nextPhotos[targetIndex]] = [
+      nextPhotos[targetIndex],
+      nextPhotos[index],
+    ];
+
+    await persistOrder(nextPhotos);
+  }
+
   async function handleAltChange(photoId: string, nextAlt: string) {
     const response = await fetch(`/api/admin/photos/${photoId}`, {
       method: "PATCH",
@@ -132,11 +171,17 @@ export function PhotoManager({
         <p className="text-[#A1A1A6]">No photos yet.</p>
       ) : (
         <div className="grid gap-6">
-          {photos.map((photo) => (
+          {photos.map((photo, index) => (
             <div
               key={photo.id}
-              className="grid gap-4 rounded-3xl border border-neutral-800 bg-[#111111] p-4 md:grid-cols-[180px_1fr_auto]"
+              className="grid gap-4 rounded-3xl border border-neutral-800 bg-[#111111] p-4 md:grid-cols-[auto_180px_1fr_auto]"
             >
+              <ReorderButtons
+                onMoveUp={() => movePhoto(photo.id, -1)}
+                onMoveDown={() => movePhoto(photo.id, 1)}
+                disableUp={index === 0}
+                disableDown={index === photos.length - 1}
+              />
               <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-[#1A1A1A]">
                 <Image
                   src={photo.url}

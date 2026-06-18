@@ -91,5 +91,6 @@ model SiteSettings {
   instagram     String?
   vimeo         String?
   youtube       String?
+  ogImageUrl    String?
   updatedAt     DateTime @updatedAt
 }

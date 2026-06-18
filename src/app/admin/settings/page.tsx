@@ -1,10 +1,15 @@
 import Link from "next/link";
 
+import { OgImageSection } from "@/components/admin/OgImageSection";
 import { SettingsForm } from "@/components/admin/SettingsForm";
+import { isCloudinaryConfigured } from "@/lib/cloudinary";
 import { getSiteSettings } from "@/lib/site";
 
 export default async function AdminSettingsPage() {
-  const settings = await getSiteSettings();
+  const [settings, cloudinaryConfigured] = await Promise.all([
+    getSiteSettings(),
+    Promise.resolve(isCloudinaryConfigured()),
+  ]);
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-12">
@@ -34,18 +39,25 @@ export default async function AdminSettingsPage() {
         </div>
       </div>
 
-      <SettingsForm
-        initialValues={{
-          siteTitle: settings.siteTitle,
-          bio: settings.bio ?? "",
-          footerTagline: settings.footerTagline ?? "",
-          contactBlurb: settings.contactBlurb ?? "",
-          contactEmail: settings.contactEmail ?? "",
-          instagram: settings.instagram ?? "",
-          vimeo: settings.vimeo ?? "",
-          youtube: settings.youtube ?? "",
-        }}
-      />
+      <div className="space-y-8">
+        <SettingsForm
+          initialValues={{
+            siteTitle: settings.siteTitle,
+            bio: settings.bio ?? "",
+            footerTagline: settings.footerTagline ?? "",
+            contactBlurb: settings.contactBlurb ?? "",
+            contactEmail: settings.contactEmail ?? "",
+            instagram: settings.instagram ?? "",
+            vimeo: settings.vimeo ?? "",
+            youtube: settings.youtube ?? "",
+          }}
+        />
+
+        <OgImageSection
+          initialOgImageUrl={settings.ogImageUrl}
+          cloudinaryConfigured={cloudinaryConfigured}
+        />
+      </div>
     </div>
   );
 }

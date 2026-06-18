@@ -19,9 +19,21 @@ export async function getSiteSettings() {
       instagram: null,
       vimeo: null,
       youtube: null,
+      ogImageUrl: null,
       updatedAt: new Date(),
     }
   );
+}
+
+export async function updateOgImageUrl(ogImageUrl: string | null) {
+  return db.siteSettings.upsert({
+    where: { id: SETTINGS_ID },
+    update: { ogImageUrl },
+    create: {
+      id: SETTINGS_ID,
+      ogImageUrl,
+    },
+  });
 }
 
 export async function updateSiteSettings(data: SiteSettingsInput) {

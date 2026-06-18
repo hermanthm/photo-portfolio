@@ -48,6 +48,12 @@ export default async function AdminDashboardPage() {
             Site settings
           </Link>
           <Link
+            href="/admin/account"
+            className="rounded-full border border-neutral-700 px-5 py-2 text-[#A1A1A6] transition hover:text-[#F5F5F7]"
+          >
+            Account
+          </Link>
+          <Link
             href="/admin/collections/new"
             className="rounded-full border border-neutral-700 px-5 py-2 text-[#A1A1A6] transition hover:text-[#F5F5F7]"
           >

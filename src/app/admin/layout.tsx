@@ -31,6 +31,9 @@ export default async function AdminLayout({
                   <Link href="/admin/settings" className="hover:text-[#F5F5F7]">
                     Settings
                   </Link>
+                  <Link href="/admin/account" className="hover:text-[#F5F5F7]">
+                    Account
+                  </Link>
                   <Link href="/" className="hover:text-[#F5F5F7]">
                     View site
                   </Link>
