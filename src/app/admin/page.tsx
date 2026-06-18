@@ -31,8 +31,8 @@ export default async function AdminDashboardPage() {
       <div className="mt-12 rounded-3xl border border-neutral-800 bg-[#111111] p-8">
         <h2 className="mb-3 text-2xl font-medium">Portfolio complete</h2>
         <p className="mb-6 max-w-2xl text-[#A1A1A6]">
-          Manage collections, upload photos, add videos, and control how each
-          collection displays on the public site in slideshow view.
+          Manage collections, upload photos, add videos, and edit site settings
+          for your public portfolio.
         </p>
         <div className="flex flex-wrap gap-4 text-sm">
           <Link
@@ -40,6 +40,12 @@ export default async function AdminDashboardPage() {
             className="rounded-full border border-[#C8A97E] px-5 py-2 text-[#F5F5F7] transition hover:bg-[#C8A97E] hover:text-black"
           >
             Manage collections
+          </Link>
+          <Link
+            href="/admin/settings"
+            className="rounded-full border border-neutral-700 px-5 py-2 text-[#A1A1A6] transition hover:text-[#F5F5F7]"
+          >
+            Site settings
           </Link>
           <Link
             href="/admin/collections/new"

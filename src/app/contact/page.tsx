@@ -1,3 +1,4 @@
+import { SocialLinks } from "@/components/layout/SocialLinks";
 import { getSiteSettings } from "@/lib/site";
 
 export const metadata = {
@@ -15,6 +16,7 @@ export default async function ContactPage() {
       <p className="mt-8 text-lg leading-relaxed text-[#A1A1A6]">
         Reach out to discuss photography or film projects.
       </p>
+
       {settings.contactEmail ? (
         <a
           href={`mailto:${settings.contactEmail}`}
@@ -23,6 +25,13 @@ export default async function ContactPage() {
           {settings.contactEmail}
         </a>
       ) : null}
+
+      <SocialLinks
+        instagram={settings.instagram}
+        vimeo={settings.vimeo}
+        youtube={settings.youtube}
+        className="mt-8"
+      />
     </main>
   );
 }

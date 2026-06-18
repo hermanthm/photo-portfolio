@@ -46,7 +46,13 @@ export default async function RootLayout({
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <Navbar siteTitle={settings.siteTitle} />
         <div className="flex-1">{children}</div>
-        <Footer siteTitle={settings.siteTitle} />
+        <Footer
+          siteTitle={settings.siteTitle}
+          bio={settings.bio}
+          instagram={settings.instagram}
+          vimeo={settings.vimeo}
+          youtube={settings.youtube}
+        />
       </body>
     </html>
   );
