@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 import { requireAuth } from "@/lib/auth-guard";
 import { db } from "@/lib/db";
+import { revalidatePublicCollectionPages } from "@/lib/revalidate-public";
 import { collectionSchema } from "@/lib/validations/collection";
 
 type RouteContext = {
@@ -53,15 +54,26 @@ export async function PATCH(request: Request, context: RouteContext) {
     return NextResponse.json({ error: "Slug already exists" }, { status: 409 });
   }
 
-  try {
-    const collection = await db.collection.update({
-      where: { id },
-      data: parsed.data,
-    });
-    return NextResponse.json(collection);
-  } catch {
+  const current = await db.collection.findUnique({
+    where: { id },
+    select: { slug: true },
+  });
+
+  if (!current) {
     return NextResponse.json({ error: "Collection not found" }, { status: 404 });
   }
+
+  const collection = await db.collection.update({
+    where: { id },
+    data: parsed.data,
+  });
+
+  revalidatePublicCollectionPages(current.slug);
+  if (collection.slug !== current.slug) {
+    revalidatePublicCollectionPages(collection.slug);
+  }
+
+  return NextResponse.json(collection);
 }
 
 export async function DELETE(_request: Request, context: RouteContext) {
@@ -70,10 +82,17 @@ export async function DELETE(_request: Request, context: RouteContext) {
 
   const { id } = await context.params;
 
-  try {
-    await db.collection.delete({ where: { id } });
-    return NextResponse.json({ success: true });
-  } catch {
+  const collection = await db.collection.findUnique({
+    where: { id },
+    select: { slug: true },
+  });
+
+  if (!collection) {
     return NextResponse.json({ error: "Collection not found" }, { status: 404 });
   }
+
+  await db.collection.delete({ where: { id } });
+  revalidatePublicCollectionPages(collection.slug);
+
+  return NextResponse.json({ success: true });
 }

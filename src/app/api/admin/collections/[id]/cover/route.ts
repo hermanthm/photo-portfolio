@@ -1,8 +1,8 @@
-import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
 import { requireAuth } from "@/lib/auth-guard";
 import { db } from "@/lib/db";
+import { revalidatePublicCollectionPages } from "@/lib/revalidate-public";
 import { collectionCoverSchema } from "@/lib/validations/collection";
 
 type RouteContext = {
@@ -82,10 +82,7 @@ export async function PATCH(request: Request, context: RouteContext) {
     },
   });
 
-  revalidatePath("/");
-  revalidatePath("/photography");
-  revalidatePath("/video");
-  revalidatePath(`/work/${collection.slug}`);
+  revalidatePublicCollectionPages(collection.slug);
 
   return NextResponse.json({
     coverPhotoId: updated.coverPhotoId,

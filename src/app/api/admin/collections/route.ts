@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 import { requireAuth } from "@/lib/auth-guard";
 import { db } from "@/lib/db";
+import { revalidatePublicCollectionPages } from "@/lib/revalidate-public";
 import { collectionSchema } from "@/lib/validations/collection";
 
 export async function GET() {
@@ -41,5 +42,7 @@ export async function POST(request: Request) {
   }
 
   const collection = await db.collection.create({ data: parsed.data });
+  revalidatePublicCollectionPages(collection.slug);
+
   return NextResponse.json(collection, { status: 201 });
 }
