@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 import { requireAuth } from "@/lib/auth-guard";
 import { db } from "@/lib/db";
-import { detectVideoProvider, toEmbedUrl } from "@/lib/video";
+import { detectVideoProvider, resolveVideoThumbnail, toEmbedUrl } from "@/lib/video";
 import { videoSchema } from "@/lib/validations/video";
 
 export async function POST(request: Request) {
@@ -30,6 +30,9 @@ export async function POST(request: Request) {
 
   const embedUrl = toEmbedUrl(parsed.data.url);
   const provider = detectVideoProvider(parsed.data.url);
+  const thumbnailUrl =
+    parsed.data.thumbnailUrl ??
+    (await resolveVideoThumbnail(parsed.data.url, provider));
   const nextSortOrder =
     parsed.data.sortOrder ??
     collection.videos.reduce((max, video) => Math.max(max, video.sortOrder), -1) + 1;
@@ -41,7 +44,7 @@ export async function POST(request: Request) {
       description: parsed.data.description ?? null,
       embedUrl,
       provider,
-      thumbnailUrl: parsed.data.thumbnailUrl ?? null,
+      thumbnailUrl,
       sortOrder: nextSortOrder,
     },
   });

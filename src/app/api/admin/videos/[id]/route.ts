@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 import { requireAuth } from "@/lib/auth-guard";
 import { db } from "@/lib/db";
-import { detectVideoProvider, toEmbedUrl } from "@/lib/video";
+import { detectVideoProvider, resolveVideoThumbnail, toEmbedUrl } from "@/lib/video";
 import { videoUpdateSchema } from "@/lib/validations/video";
 
 type RouteContext = {
@@ -41,6 +41,10 @@ export async function PATCH(request: Request, context: RouteContext) {
   if (parsed.data.url) {
     data.embedUrl = toEmbedUrl(parsed.data.url);
     data.provider = detectVideoProvider(parsed.data.url);
+
+    if (parsed.data.thumbnailUrl === undefined) {
+      data.thumbnailUrl = await resolveVideoThumbnail(parsed.data.url, data.provider);
+    }
   }
 
   try {

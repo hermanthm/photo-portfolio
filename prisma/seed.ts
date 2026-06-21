@@ -164,8 +164,7 @@ async function main() {
         description: "A cinematic brand story for a technology company.",
         embedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
         provider: "youtube",
-        thumbnailUrl:
-          "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1280&h=720&fit=crop",
+        thumbnailUrl: "https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg",
         sortOrder: 0,
       },
       {
