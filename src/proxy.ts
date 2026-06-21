@@ -11,9 +11,7 @@ export default auth((req) => {
   const isLoginPage = pathname === "/admin/login";
 
   if (isAdminRoute && !isLoginPage && !req.auth) {
-    const loginUrl = new URL("/admin/login", req.nextUrl.origin);
-    loginUrl.searchParams.set("callbackUrl", pathname);
-    return NextResponse.redirect(loginUrl);
+    return new NextResponse(null, { status: 404 });
   }
 
   if (isLoginPage && req.auth) {
