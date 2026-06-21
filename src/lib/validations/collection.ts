@@ -13,6 +13,7 @@ export const collectionSchema = z.object({
   published: z.boolean(),
   featured: z.boolean(),
   sortOrder: z.number().int().min(0),
+  categoryId: z.string().cuid().nullable().optional(),
 });
 
 export type CollectionInput = z.infer<typeof collectionSchema>;

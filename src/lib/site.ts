@@ -68,6 +68,7 @@ export async function getPublishedCollections() {
     where: { published: true },
     orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
     include: {
+      category: true,
       coverPhoto: true,
       coverVideo: true,
       photos: { orderBy: { sortOrder: "asc" } },

@@ -33,6 +33,18 @@ model User {
   updatedAt    DateTime @updatedAt
 }
 
+model WorkCategory {
+  id          String       @id @default(cuid())
+  name        String
+  slug        String       @unique
+  sortOrder   Int          @default(0)
+  collections Collection[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([sortOrder])
+}
+
 model Collection {
   id           String         @id @default(cuid())
   slug         String         @unique
@@ -43,6 +55,8 @@ model Collection {
   published    Boolean        @default(false)
   featured     Boolean        @default(false)
   sortOrder    Int            @default(0)
+  categoryId   String?
+  category     WorkCategory?  @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   coverPhotoId String?        @unique
   coverPhoto   Photo?         @relation("CollectionCoverPhoto", fields: [coverPhotoId], references: [id], onDelete: SetNull)
   coverVideoId String?        @unique
@@ -51,6 +65,8 @@ model Collection {
   videos       Video[]
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
+
+  @@index([categoryId])
 }
 
 model Photo {

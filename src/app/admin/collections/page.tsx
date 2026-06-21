@@ -61,6 +61,11 @@ export default async function AdminCollectionsPage() {
                   <span className="rounded-full border border-neutral-700 px-3 py-1 text-xs uppercase tracking-[0.15em] text-[#A1A1A6]">
                     {collection.type}
                   </span>
+                  {collection.category ? (
+                    <span className="rounded-full border border-[#C8A97E]/30 px-3 py-1 text-xs text-[#C8A97E]">
+                      {collection.category.name}
+                    </span>
+                  ) : null}
                   {collection.published ? (
                     <span className="rounded-full border border-emerald-500/30 px-3 py-1 text-xs text-emerald-300">
                       Published

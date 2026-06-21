@@ -4,6 +4,7 @@ export async function getAllCollections() {
   return db.collection.findMany({
     orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
     include: {
+      category: true,
       coverPhoto: true,
       coverVideo: true,
       photos: { orderBy: { sortOrder: "asc" }, take: 1 },

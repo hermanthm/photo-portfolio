@@ -8,3 +8,7 @@ export function revalidatePublicCollectionPages(slug?: string) {
     revalidatePath(`/work/${slug}`);
   }
 }
+
+export function revalidatePublicCategoryPages() {
+  revalidatePublicCollectionPages();
+}

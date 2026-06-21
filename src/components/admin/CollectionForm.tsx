@@ -5,6 +5,11 @@ import { FormEvent, useState } from "react";
 
 import { slugify } from "@/lib/slug";
 
+type CategoryOption = {
+  id: string;
+  name: string;
+};
+
 type CollectionFormValues = {
   title: string;
   slug: string;
@@ -14,11 +19,13 @@ type CollectionFormValues = {
   published: boolean;
   featured: boolean;
   sortOrder: number;
+  categoryId: string;
 };
 
 type CollectionFormProps = {
   mode: "create" | "edit";
   collectionId?: string;
+  categories: CategoryOption[];
   initialValues?: Partial<CollectionFormValues>;
 };
 
@@ -31,11 +38,13 @@ const defaultValues: CollectionFormValues = {
   published: false,
   featured: false,
   sortOrder: 0,
+  categoryId: "",
 };
 
 export function CollectionForm({
   mode,
   collectionId,
+  categories,
   initialValues,
 }: CollectionFormProps) {
   const router = useRouter();
@@ -71,6 +80,7 @@ export function CollectionForm({
       ...values,
       defaultView: "slideshow" as const,
       description: values.description.trim() || null,
+      categoryId: values.categoryId || null,
     };
 
     const response = await fetch(
@@ -136,7 +146,7 @@ export function CollectionForm({
         />
       </label>
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-6 md:grid-cols-3">
         <label className="block space-y-2">
           <span className="text-sm text-[#A1A1A6]">Type</span>
           <select
@@ -149,6 +159,22 @@ export function CollectionForm({
             <option value="photo">Photo</option>
             <option value="video">Video</option>
             <option value="mixed">Mixed</option>
+          </select>
+        </label>
+
+        <label className="block space-y-2">
+          <span className="text-sm text-[#A1A1A6]">Work category</span>
+          <select
+            value={values.categoryId}
+            onChange={(event) => updateField("categoryId", event.target.value)}
+            className="w-full rounded-xl border border-neutral-800 bg-[#0F0F0F] px-4 py-3 text-[#F5F5F7] outline-none transition focus:border-[#C8A97E]"
+          >
+            <option value="">Uncategorized</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
           </select>
         </label>
 

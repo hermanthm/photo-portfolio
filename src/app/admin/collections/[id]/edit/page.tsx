@@ -5,6 +5,7 @@ import { CollectionForm } from "@/components/admin/CollectionForm";
 import { CoverImagePicker } from "@/components/admin/CoverImagePicker";
 import { DeleteCollectionButton } from "@/components/admin/DeleteCollectionButton";
 import { getCollectionById } from "@/lib/admin";
+import { getWorkCategoriesForSelect } from "@/lib/work-category";
 
 type EditCollectionPageProps = {
   params: Promise<{ id: string }>;
@@ -14,7 +15,10 @@ export default async function EditCollectionPage({
   params,
 }: EditCollectionPageProps) {
   const { id } = await params;
-  const collection = await getCollectionById(id);
+  const [collection, categories] = await Promise.all([
+    getCollectionById(id),
+    getWorkCategoriesForSelect(),
+  ]);
 
   if (!collection) {
     notFound();
@@ -48,6 +52,7 @@ export default async function EditCollectionPage({
       <CollectionForm
         mode="edit"
         collectionId={collection.id}
+        categories={categories}
         initialValues={{
           title: collection.title,
           slug: collection.slug,
@@ -57,6 +62,7 @@ export default async function EditCollectionPage({
           published: collection.published,
           featured: collection.featured,
           sortOrder: collection.sortOrder,
+          categoryId: collection.categoryId ?? "",
         }}
       />
 

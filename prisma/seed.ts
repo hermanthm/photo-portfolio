@@ -76,6 +76,28 @@ async function main() {
     },
   });
 
+  const categorySeeds = [
+    { slug: "event", name: "Event", sortOrder: 0 },
+    { slug: "product", name: "Product", sortOrder: 1 },
+    { slug: "advertising", name: "Advertising", sortOrder: 2 },
+    { slug: "portrait", name: "Portrait", sortOrder: 3 },
+    { slug: "other", name: "Other", sortOrder: 4 },
+  ] as const;
+
+  const categories: Record<string, { id: string }> = {};
+
+  for (const category of categorySeeds) {
+    const saved = await db.workCategory.upsert({
+      where: { slug: category.slug },
+      update: {
+        name: category.name,
+        sortOrder: category.sortOrder,
+      },
+      create: category,
+    });
+    categories[category.slug] = saved;
+  }
+
   const streetPhotography = await db.collection.upsert({
     where: { slug: "street-photography" },
     update: {
@@ -86,6 +108,7 @@ async function main() {
       published: true,
       featured: true,
       sortOrder: 1,
+      categoryId: categories.portrait.id,
     },
     create: {
       slug: "street-photography",
@@ -96,6 +119,7 @@ async function main() {
       published: true,
       featured: true,
       sortOrder: 1,
+      categoryId: categories.portrait.id,
     },
   });
 
@@ -109,6 +133,7 @@ async function main() {
       published: true,
       featured: true,
       sortOrder: 2,
+      categoryId: categories.advertising.id,
     },
     create: {
       slug: "brand-films",
@@ -119,6 +144,7 @@ async function main() {
       published: true,
       featured: true,
       sortOrder: 2,
+      categoryId: categories.advertising.id,
     },
   });
 

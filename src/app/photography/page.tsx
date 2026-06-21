@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
-import { CollectionPreview } from "@/components/gallery/CollectionPreview";
-import { getCollectionCoverUrl } from "@/lib/collection-cover";
+import { CollectionCategorySections } from "@/components/gallery/CollectionCategorySections";
+import { groupCollectionsByCategory } from "@/lib/group-collections";
 import { getPublishedCollections, getSiteSettings } from "@/lib/site";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -18,6 +18,7 @@ export default async function PhotographyPage() {
   const photoCollections = collections.filter(
     (collection) => collection.type === "photo" || collection.type === "mixed",
   );
+  const groups = groupCollectionsByCategory(photoCollections);
 
   return (
     <main className="mx-auto max-w-6xl px-6 pt-32 pb-24">
@@ -28,18 +29,10 @@ export default async function PhotographyPage() {
         Browse photo collections in fullscreen slideshows.
       </p>
 
-      <div className="mt-16 grid gap-8 md:grid-cols-2">
-        {photoCollections.map((collection) => (
-          <CollectionPreview
-            key={collection.id}
-            slug={collection.slug}
-            title={collection.title}
-            description={collection.description}
-            type={collection.type}
-            coverUrl={getCollectionCoverUrl(collection)}
-          />
-        ))}
-      </div>
+      <CollectionCategorySections
+        groups={groups}
+        emptyMessage="No photo collections published yet."
+      />
     </main>
   );
 }
