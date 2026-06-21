@@ -1,6 +1,8 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import { getAllCollections } from "@/lib/admin";
+import { getCollectionCoverUrl } from "@/lib/collection-cover";
 
 export default async function AdminCollectionsPage() {
   const collections = await getAllCollections();
@@ -28,12 +30,30 @@ export default async function AdminCollectionsPage() {
         </div>
       ) : (
         <div className="space-y-4">
-          {collections.map((collection) => (
+          {collections.map((collection) => {
+            const coverUrl = getCollectionCoverUrl(collection);
+
+            return (
             <div
               key={collection.id}
               className="flex flex-col gap-4 rounded-3xl border border-neutral-800 bg-[#111111] p-6 md:flex-row md:items-center md:justify-between"
             >
-              <div>
+              {coverUrl ? (
+                <div className="relative h-20 w-32 shrink-0 overflow-hidden rounded-2xl bg-[#1A1A1A]">
+                  <Image
+                    src={coverUrl}
+                    alt={collection.title}
+                    fill
+                    className="object-cover"
+                    sizes="128px"
+                  />
+                </div>
+              ) : (
+                <div className="flex h-20 w-32 shrink-0 items-center justify-center rounded-2xl bg-[#1A1A1A] text-xs text-[#A1A1A6]">
+                  No cover
+                </div>
+              )}
+              <div className="flex-1">
                 <div className="mb-2 flex flex-wrap items-center gap-3">
                   <h2 className="text-2xl font-medium text-[#F5F5F7]">
                     {collection.title}
@@ -84,7 +104,8 @@ export default async function AdminCollectionsPage() {
                 </Link>
               </div>
             </div>
-          ))}
+          );
+          })}
         </div>
       )}
     </div>

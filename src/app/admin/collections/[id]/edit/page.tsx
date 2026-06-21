@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { CollectionForm } from "@/components/admin/CollectionForm";
+import { CoverImagePicker } from "@/components/admin/CoverImagePicker";
 import { DeleteCollectionButton } from "@/components/admin/DeleteCollectionButton";
 import { getCollectionById } from "@/lib/admin";
 
@@ -58,6 +59,16 @@ export default async function EditCollectionPage({
           sortOrder: collection.sortOrder,
         }}
       />
+
+      <div className="mt-10">
+        <CoverImagePicker
+          collectionId={collection.id}
+          photos={collection.photos}
+          videos={collection.videos}
+          coverPhotoId={collection.coverPhotoId}
+          coverVideoId={collection.coverVideoId}
+        />
+      </div>
 
       <div className="mt-10 border-t border-neutral-800 pt-8">
         <DeleteCollectionButton

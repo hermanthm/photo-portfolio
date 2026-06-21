@@ -34,25 +34,30 @@ model User {
 }
 
 model Collection {
-  id          String         @id @default(cuid())
-  slug        String         @unique
-  title       String
-  description String?
-  type        CollectionType @default(mixed)
-  defaultView DefaultView    @default(mosaic)
-  published   Boolean        @default(false)
-  featured    Boolean        @default(false)
-  sortOrder   Int            @default(0)
-  photos      Photo[]
-  videos      Video[]
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
+  id           String         @id @default(cuid())
+  slug         String         @unique
+  title        String
+  description  String?
+  type         CollectionType @default(mixed)
+  defaultView  DefaultView    @default(mosaic)
+  published    Boolean        @default(false)
+  featured     Boolean        @default(false)
+  sortOrder    Int            @default(0)
+  coverPhotoId String?        @unique
+  coverPhoto   Photo?         @relation("CollectionCoverPhoto", fields: [coverPhotoId], references: [id], onDelete: SetNull)
+  coverVideoId String?        @unique
+  coverVideo   Video?         @relation("CollectionCoverVideo", fields: [coverVideoId], references: [id], onDelete: SetNull)
+  photos       Photo[]
+  videos       Video[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
 }
 
 model Photo {
-  id           String     @id @default(cuid())
-  collectionId String
-  collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  id                 String      @id @default(cuid())
+  collectionId       String
+  collection         Collection  @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  coverForCollection Collection? @relation("CollectionCoverPhoto")
   cloudinaryId String?
   url          String
   alt          String?
@@ -66,9 +71,10 @@ model Photo {
 }
 
 model Video {
-  id           String        @id @default(cuid())
-  collectionId String
-  collection   Collection    @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  id                 String        @id @default(cuid())
+  collectionId       String
+  collection         Collection    @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  coverForCollection Collection?   @relation("CollectionCoverVideo")
   title        String
   description  String?
   embedUrl     String

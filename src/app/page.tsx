@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { CollectionPreview } from "@/components/gallery/CollectionPreview";
+import { getCollectionCoverUrl } from "@/lib/collection-cover";
 import { getPublishedCollections, getSiteSettings } from "@/lib/site";
 
 export default async function HomePage() {
@@ -67,11 +68,7 @@ export default async function HomePage() {
                 title={collection.title}
                 description={collection.description}
                 type={collection.type}
-                photos={collection.photos}
-                coverUrl={
-                  collection.photos[0]?.url ??
-                  collection.videos[0]?.thumbnailUrl
-                }
+                coverUrl={getCollectionCoverUrl(collection)}
               />
             ))}
           </div>

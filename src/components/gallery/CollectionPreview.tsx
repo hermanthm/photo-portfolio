@@ -1,15 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import type { GalleryPhoto } from "@/components/gallery/types";
-
 type CollectionPreviewProps = {
   slug: string;
   title: string;
   description: string | null;
   type: string;
-  photos: GalleryPhoto[];
-  coverUrl?: string | null;
+  coverUrl: string | null;
 };
 
 export function CollectionPreview({
@@ -17,20 +14,17 @@ export function CollectionPreview({
   title,
   description,
   type,
-  photos,
   coverUrl,
 }: CollectionPreviewProps) {
-  const cover = photos[0]?.url ?? coverUrl;
-
   return (
     <Link
       href={`/work/${slug}`}
       className="group overflow-hidden rounded-3xl border border-neutral-800/50 bg-[#111111] transition hover:border-[#C8A97E]/30"
     >
-      {cover ? (
+      {coverUrl ? (
         <div className="relative aspect-[16/10] overflow-hidden bg-[#1A1A1A]">
           <Image
-            src={cover}
+            src={coverUrl}
             alt={title}
             fill
             className="object-cover transition duration-500 group-hover:scale-105"

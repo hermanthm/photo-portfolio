@@ -44,6 +44,7 @@ export default async function CollectionPhotosPage({ params }: PhotosPageProps) 
         collectionId={collection.id}
         initialPhotos={collection.photos}
         cloudinaryConfigured={isCloudinaryConfigured()}
+        coverPhotoId={collection.coverPhotoId}
       />
     </div>
   );

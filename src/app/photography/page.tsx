@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { CollectionPreview } from "@/components/gallery/CollectionPreview";
+import { getCollectionCoverUrl } from "@/lib/collection-cover";
 import { getPublishedCollections, getSiteSettings } from "@/lib/site";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -35,7 +36,7 @@ export default async function PhotographyPage() {
             title={collection.title}
             description={collection.description}
             type={collection.type}
-            photos={collection.photos}
+            coverUrl={getCollectionCoverUrl(collection)}
           />
         ))}
       </div>

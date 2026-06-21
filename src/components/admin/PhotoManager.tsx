@@ -17,18 +17,38 @@ type PhotoManagerProps = {
   collectionId: string;
   initialPhotos: PhotoItem[];
   cloudinaryConfigured: boolean;
+  coverPhotoId?: string | null;
 };
 
 export function PhotoManager({
   collectionId,
   initialPhotos,
   cloudinaryConfigured,
+  coverPhotoId: initialCoverPhotoId = null,
 }: PhotoManagerProps) {
   const router = useRouter();
   const [photos, setPhotos] = useState(initialPhotos);
   const [alt, setAlt] = useState("");
+  const [coverPhotoId, setCoverPhotoId] = useState(initialCoverPhotoId);
   const [error, setError] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
+
+  async function handleSetCover(photoId: string) {
+    const response = await fetch(`/api/admin/collections/${collectionId}/cover`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ photoId }),
+    });
+
+    if (!response.ok) {
+      setError("Failed to set cover image.");
+      return;
+    }
+
+    const data = await response.json();
+    setCoverPhotoId(data.coverPhotoId);
+    router.refresh();
+  }
 
   async function handleUpload(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
@@ -190,6 +210,11 @@ export function PhotoManager({
                   className="object-cover"
                   sizes="180px"
                 />
+                {coverPhotoId === photo.id ? (
+                  <span className="absolute top-2 left-2 rounded-full bg-[#C8A97E] px-2 py-0.5 text-xs font-medium text-black">
+                    Cover
+                  </span>
+                ) : null}
               </div>
 
               <div className="space-y-3">
@@ -205,13 +230,24 @@ export function PhotoManager({
                 <p className="text-sm text-[#A1A1A6]">Sort order: {photo.sortOrder}</p>
               </div>
 
-              <button
-                type="button"
-                onClick={() => handleDelete(photo.id)}
-                className="h-fit rounded-xl border border-red-500/40 px-4 py-2 text-sm text-red-300 transition hover:bg-red-500/10"
-              >
-                Delete
-              </button>
+              <div className="flex h-fit flex-col gap-2">
+                {coverPhotoId !== photo.id ? (
+                  <button
+                    type="button"
+                    onClick={() => handleSetCover(photo.id)}
+                    className="rounded-xl border border-neutral-700 px-4 py-2 text-sm text-[#A1A1A6] transition hover:text-[#F5F5F7]"
+                  >
+                    Set as cover
+                  </button>
+                ) : null}
+                <button
+                  type="button"
+                  onClick={() => handleDelete(photo.id)}
+                  className="rounded-xl border border-red-500/40 px-4 py-2 text-sm text-red-300 transition hover:bg-red-500/10"
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           ))}
         </div>

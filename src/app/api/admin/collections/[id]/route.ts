@@ -16,6 +16,8 @@ export async function GET(_request: Request, context: RouteContext) {
   const collection = await db.collection.findUnique({
     where: { id },
     include: {
+      coverPhoto: true,
+      coverVideo: true,
       photos: { orderBy: { sortOrder: "asc" } },
       videos: { orderBy: { sortOrder: "asc" } },
     },

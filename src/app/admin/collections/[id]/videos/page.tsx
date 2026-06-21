@@ -39,7 +39,11 @@ export default async function CollectionVideosPage({ params }: VideosPageProps) 
         </div>
       </div>
 
-      <VideoManager collectionId={collection.id} initialVideos={collection.videos} />
+      <VideoManager
+        collectionId={collection.id}
+        initialVideos={collection.videos}
+        coverVideoId={collection.coverVideoId}
+      />
     </div>
   );
 }

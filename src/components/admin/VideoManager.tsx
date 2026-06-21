@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 
@@ -18,11 +19,17 @@ type VideoItem = {
 type VideoManagerProps = {
   collectionId: string;
   initialVideos: VideoItem[];
+  coverVideoId?: string | null;
 };
 
-export function VideoManager({ collectionId, initialVideos }: VideoManagerProps) {
+export function VideoManager({
+  collectionId,
+  initialVideos,
+  coverVideoId: initialCoverVideoId = null,
+}: VideoManagerProps) {
   const router = useRouter();
   const [videos, setVideos] = useState(initialVideos);
+  const [coverVideoId, setCoverVideoId] = useState(initialCoverVideoId);
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
   const [description, setDescription] = useState("");
@@ -96,6 +103,23 @@ export function VideoManager({ collectionId, initialVideos }: VideoManagerProps)
     ];
 
     await persistOrder(nextVideos);
+  }
+
+  async function handleSetCover(videoId: string) {
+    const response = await fetch(`/api/admin/collections/${collectionId}/cover`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ videoId }),
+    });
+
+    if (!response.ok) {
+      setError("Failed to set cover image.");
+      return;
+    }
+
+    const data = await response.json();
+    setCoverVideoId(data.coverVideoId);
+    router.refresh();
   }
 
   async function handleDelete(videoId: string) {
@@ -181,6 +205,22 @@ export function VideoManager({ collectionId, initialVideos }: VideoManagerProps)
                 disableUp={index === 0}
                 disableDown={index === videos.length - 1}
               />
+              {video.thumbnailUrl ? (
+                <div className="relative h-24 w-40 shrink-0 overflow-hidden rounded-2xl bg-[#1A1A1A]">
+                  <Image
+                    src={video.thumbnailUrl}
+                    alt={video.title}
+                    fill
+                    className="object-cover"
+                    sizes="160px"
+                  />
+                  {coverVideoId === video.id ? (
+                    <span className="absolute top-2 left-2 rounded-full bg-[#C8A97E] px-2 py-0.5 text-xs font-medium text-black">
+                      Cover
+                    </span>
+                  ) : null}
+                </div>
+              ) : null}
               <div className="flex-1">
                 <h3 className="text-lg font-medium text-[#F5F5F7]">{video.title}</h3>
                 <p className="mt-1 text-sm text-[#A1A1A6]">
@@ -193,6 +233,15 @@ export function VideoManager({ collectionId, initialVideos }: VideoManagerProps)
               </div>
 
               <div className="flex flex-col gap-2 md:items-end">
+                {video.thumbnailUrl && coverVideoId !== video.id ? (
+                  <button
+                    type="button"
+                    onClick={() => handleSetCover(video.id)}
+                    className="rounded-xl border border-neutral-700 px-4 py-2 text-sm text-[#A1A1A6] transition hover:text-[#F5F5F7]"
+                  >
+                    Set as cover
+                  </button>
+                ) : null}
                 <button
                   type="button"
                   onClick={() => handleDelete(video.id)}

@@ -16,3 +16,19 @@ export const collectionSchema = z.object({
 });
 
 export type CollectionInput = z.infer<typeof collectionSchema>;
+
+export const collectionCoverSchema = z
+  .object({
+    photoId: z.string().cuid().nullable().optional(),
+    videoId: z.string().cuid().nullable().optional(),
+  })
+  .refine(
+    (data) => {
+      const hasPhoto = data.photoId != null && data.photoId !== undefined;
+      const hasVideo = data.videoId != null && data.videoId !== undefined;
+      return !(hasPhoto && hasVideo);
+    },
+    { message: "Set either photoId or videoId, not both" },
+  );
+
+export type CollectionCoverInput = z.infer<typeof collectionCoverSchema>;
