@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { AdminCategoriesShortcut } from "@/components/admin/AdminCategoriesShortcut";
 import { SignOutButton } from "@/components/admin/SignOutButton";
 import { SessionProvider } from "@/components/providers/SessionProvider";
 import { auth } from "@/lib/auth";
@@ -44,7 +45,10 @@ export default async function AdminLayout({
                 </nav>
               </div>
               <div className="flex items-center gap-4">
-                <p className="text-sm text-[#A1A1A6]">{session.user?.email}</p>
+                <AdminCategoriesShortcut />
+                <p className="hidden text-sm text-[#A1A1A6] sm:block">
+                  {session.user?.email}
+                </p>
                 <SignOutButton />
               </div>
             </div>

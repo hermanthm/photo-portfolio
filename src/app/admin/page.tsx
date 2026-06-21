@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { AdminCategoriesShortcut } from "@/components/admin/AdminCategoriesShortcut";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { getSiteSettings } from "@/lib/site";
@@ -50,6 +51,7 @@ export default async function AdminDashboardPage() {
           >
             Manage collections
           </Link>
+          <AdminCategoriesShortcut />
           <Link
             href="/admin/settings"
             className="rounded-full border border-neutral-700 px-5 py-2 text-[#A1A1A6] transition hover:text-[#F5F5F7]"

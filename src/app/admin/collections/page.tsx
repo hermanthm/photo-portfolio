@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { AdminCategoriesShortcut } from "@/components/admin/AdminCategoriesShortcut";
 import { getAllCollections } from "@/lib/admin";
 import { getCollectionCoverUrl } from "@/lib/collection-cover";
 
@@ -16,12 +17,15 @@ export default async function AdminCollectionsPage() {
           </p>
           <h1 className="text-4xl font-medium">Manage collections</h1>
         </div>
-        <Link
-          href="/admin/collections/new"
-          className="rounded-full border border-[#C8A97E] px-5 py-2 text-[#F5F5F7] transition hover:bg-[#C8A97E] hover:text-black"
-        >
-          New collection
-        </Link>
+        <div className="flex flex-wrap gap-3">
+          <AdminCategoriesShortcut />
+          <Link
+            href="/admin/collections/new"
+            className="rounded-full border border-[#C8A97E] px-5 py-2 text-[#F5F5F7] transition hover:bg-[#C8A97E] hover:text-black"
+          >
+            New collection
+          </Link>
+        </div>
       </div>
 
       {collections.length === 0 ? (

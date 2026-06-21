@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { AdminCategoriesShortcut } from "@/components/admin/AdminCategoriesShortcut";
 import { OgImageSection } from "@/components/admin/OgImageSection";
 import { SettingsForm } from "@/components/admin/SettingsForm";
 import { isCloudinaryConfigured } from "@/lib/cloudinary";
@@ -24,6 +25,7 @@ export default async function AdminSettingsPage() {
           </p>
         </div>
         <div className="flex flex-wrap gap-3 text-sm">
+          <AdminCategoriesShortcut />
           <Link
             href="/about"
             className="rounded-full border border-neutral-700 px-4 py-2 text-[#A1A1A6] transition hover:text-[#F5F5F7]"

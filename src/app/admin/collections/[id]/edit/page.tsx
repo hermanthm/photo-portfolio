@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { AdminCategoriesShortcut } from "@/components/admin/AdminCategoriesShortcut";
 import { CollectionForm } from "@/components/admin/CollectionForm";
 import { CoverImagePicker } from "@/components/admin/CoverImagePicker";
 import { DeleteCollectionButton } from "@/components/admin/DeleteCollectionButton";
@@ -34,6 +35,7 @@ export default async function EditCollectionPage({
           <h1 className="text-4xl font-medium">Edit collection</h1>
         </div>
         <div className="flex flex-wrap gap-3 text-sm">
+          <AdminCategoriesShortcut />
           <Link
             href={`/admin/collections/${collection.id}/photos`}
             className="rounded-full border border-neutral-700 px-4 py-2 text-[#A1A1A6] transition hover:text-[#F5F5F7]"

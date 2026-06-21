@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { AdminCategoriesShortcut } from "@/components/admin/AdminCategoriesShortcut";
 import { PhotoManager } from "@/components/admin/PhotoManager";
 import { getCollectionById } from "@/lib/admin";
 import { isCloudinaryConfigured } from "@/lib/cloudinary";
@@ -24,7 +25,8 @@ export default async function CollectionPhotosPage({ params }: PhotosPageProps) 
           {collection.title}
         </p>
         <h1 className="text-4xl font-medium">Photos</h1>
-        <div className="mt-4 flex flex-wrap gap-3 text-sm">
+        <div className="mt-4 flex flex-wrap items-center gap-3 text-sm">
+          <AdminCategoriesShortcut />
           <Link
             href={`/admin/collections/${collection.id}/edit`}
             className="text-[#A1A1A6] transition hover:text-[#F5F5F7]"

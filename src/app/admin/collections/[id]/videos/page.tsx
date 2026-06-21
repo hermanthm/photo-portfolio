@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { AdminCategoriesShortcut } from "@/components/admin/AdminCategoriesShortcut";
 import { VideoManager } from "@/components/admin/VideoManager";
 import { getCollectionById } from "@/lib/admin";
 
@@ -23,7 +24,8 @@ export default async function CollectionVideosPage({ params }: VideosPageProps) 
           {collection.title}
         </p>
         <h1 className="text-4xl font-medium">Videos</h1>
-        <div className="mt-4 flex flex-wrap gap-3 text-sm">
+        <div className="mt-4 flex flex-wrap items-center gap-3 text-sm">
+          <AdminCategoriesShortcut />
           <Link
             href={`/admin/collections/${collection.id}/edit`}
             className="text-[#A1A1A6] transition hover:text-[#F5F5F7]"
