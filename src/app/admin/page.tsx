@@ -2,24 +2,33 @@ import Link from "next/link";
 
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { getSiteSettings } from "@/lib/site";
 
 export default async function AdminDashboardPage() {
-  const session = await auth();
+  const [session, settings, collectionCount, photoCount, videoCount, publishedCount] =
+    await Promise.all([
+      auth(),
+      getSiteSettings(),
+      db.collection.count(),
+      db.photo.count(),
+      db.video.count(),
+      db.collection.count({ where: { published: true } }),
+    ]);
 
-  const [collectionCount, photoCount, videoCount] = await Promise.all([
-    db.collection.count(),
-    db.photo.count(),
-    db.video.count(),
-  ]);
+  const displayName = session?.user?.name ?? session?.user?.email ?? "Admin";
+  const summary =
+    settings.footerTagline ??
+    settings.bio ??
+    "Manage collections, upload photos, add videos, and edit site settings.";
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-12">
       <p className="mb-2 text-sm uppercase tracking-[0.2em] text-[#C8A97E]">
         Dashboard
       </p>
-      <h1 className="mb-2 text-4xl font-medium">Welcome back</h1>
+      <h1 className="mb-2 text-4xl font-medium">Welcome back, {displayName}</h1>
       <p className="mb-10 text-[#A1A1A6]">
-        Signed in as {session?.user?.email ?? "admin"}.
+        Managing <span className="text-[#F5F5F7]">{settings.siteTitle}</span>
       </p>
 
       <div className="grid gap-6 md:grid-cols-3">
@@ -29,10 +38,10 @@ export default async function AdminDashboardPage() {
       </div>
 
       <div className="mt-12 rounded-3xl border border-neutral-800 bg-[#111111] p-8">
-        <h2 className="mb-3 text-2xl font-medium">Portfolio complete</h2>
-        <p className="mb-6 max-w-2xl text-[#A1A1A6]">
-          Manage collections, upload photos, add videos, and edit site settings
-          for your public portfolio.
+        <h2 className="mb-3 text-2xl font-medium">{settings.siteTitle}</h2>
+        <p className="mb-2 max-w-2xl text-[#A1A1A6]">{summary}</p>
+        <p className="mb-6 text-sm text-[#A1A1A6]">
+          {publishedCount} of {collectionCount} collections published
         </p>
         <div className="flex flex-wrap gap-4 text-sm">
           <Link
