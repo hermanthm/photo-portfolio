@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
+import { SessionProvider } from "@/components/providers/SessionProvider";
 import { buildSiteMetadata } from "@/lib/seo";
 import { getSiteSettings } from "@/lib/site";
 
@@ -39,15 +40,17 @@ export default async function RootLayout({
         className="min-h-full flex flex-col bg-background text-foreground"
         suppressHydrationWarning
       >
-        <Navbar siteTitle={settings.siteTitle} />
-        <div className="flex-1">{children}</div>
-        <Footer
-          siteTitle={settings.siteTitle}
-          footerTagline={settings.footerTagline}
-          instagram={settings.instagram}
-          vimeo={settings.vimeo}
-          youtube={settings.youtube}
-        />
+        <SessionProvider>
+          <Navbar siteTitle={settings.siteTitle} />
+          <div className="flex-1">{children}</div>
+          <Footer
+            siteTitle={settings.siteTitle}
+            footerTagline={settings.footerTagline}
+            instagram={settings.instagram}
+            vimeo={settings.vimeo}
+            youtube={settings.youtube}
+          />
+        </SessionProvider>
       </body>
     </html>
   );
