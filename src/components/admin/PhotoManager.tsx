@@ -95,17 +95,12 @@ export function PhotoManager({
     router.refresh();
   }
 
-  function updateBatchItem(id: string, patch: Partial<BatchUploadItem>) {
-    setBatchItems((current) =>
-      current.map((item) => (item.id === id ? { ...item, ...patch } : item)),
-    );
-  }
-
   async function handleBatchUpload(event: ChangeEvent<HTMLInputElement>) {
-    const files = event.target.files;
-    if (!files?.length) return;
+    const input = event.target;
+    const fileList = Array.from(input.files ?? []);
+    if (!fileList.length) return;
 
-    const items: BatchUploadItem[] = Array.from(files).map((file) => ({
+    const items: BatchUploadItem[] = fileList.map((file) => ({
       id: crypto.randomUUID(),
       fileName: file.name,
       status: "pending",
@@ -114,38 +109,52 @@ export function PhotoManager({
     setBatchItems(items);
     setBatchUploading(true);
     setError(null);
-    event.target.value = "";
 
     const uploadedPhotos: PhotoItem[] = [];
+    const workingItems = [...items];
 
-    for (let index = 0; index < files.length; index++) {
-      const file = files[index];
-      const item = items[index];
+    for (let index = 0; index < fileList.length; index++) {
+      const file = fileList[index];
+      const item = workingItems[index];
 
-      updateBatchItem(item.id, { status: "uploading" });
+      workingItems[index] = { ...item, status: "uploading" };
+      setBatchItems([...workingItems]);
 
-      const formData = new FormData();
-      formData.append("collectionId", collectionId);
-      formData.append("file", file);
+      try {
+        const formData = new FormData();
+        formData.append("collectionId", collectionId);
+        formData.append("file", file);
 
-      const response = await fetch("/api/admin/photos/upload", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        const data = await response.json().catch(() => null);
-        updateBatchItem(item.id, {
-          status: "error",
-          error: data?.error ?? "Upload failed.",
+        const response = await fetch("/api/admin/photos/upload", {
+          method: "POST",
+          body: formData,
         });
-        continue;
+
+        if (!response.ok) {
+          const data = await response.json().catch(() => null);
+          workingItems[index] = {
+            ...item,
+            status: "error",
+            error: data?.error ?? "Upload failed.",
+          };
+        } else {
+          const photo = await response.json();
+          uploadedPhotos.push(photo);
+          workingItems[index] = { ...item, status: "success" };
+        }
+      } catch (uploadError) {
+        workingItems[index] = {
+          ...item,
+          status: "error",
+          error:
+            uploadError instanceof Error ? uploadError.message : "Upload failed.",
+        };
       }
 
-      const photo = await response.json();
-      uploadedPhotos.push(photo);
-      updateBatchItem(item.id, { status: "success" });
+      setBatchItems([...workingItems]);
     }
+
+    input.value = "";
 
     if (uploadedPhotos.length > 0) {
       setPhotos((current) =>
@@ -249,6 +258,10 @@ export function PhotoManager({
       return `Uploading ${inProgress} of ${batchTotal}`;
     }
 
+    if (batchItems.every((item) => item.status === "pending")) {
+      return "Upload did not start";
+    }
+
     const parts: string[] = [];
     if (batchSuccessCount > 0) {
       parts.push(`${batchSuccessCount} uploaded`);
@@ -256,7 +269,11 @@ export function PhotoManager({
     if (batchErrorCount > 0) {
       parts.push(`${batchErrorCount} failed`);
     }
-    return parts.join(", ") || "Upload complete";
+    const pendingCount = batchItems.filter((item) => item.status === "pending").length;
+    if (pendingCount > 0) {
+      parts.push(`${pendingCount} pending`);
+    }
+    return parts.join(", ");
   }
 
   function statusBadge(item: BatchUploadItem) {
