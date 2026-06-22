@@ -13,6 +13,15 @@ type PhotoItem = {
   sortOrder: number;
 };
 
+type UploadStatus = "pending" | "uploading" | "success" | "error";
+
+type BatchUploadItem = {
+  id: string;
+  fileName: string;
+  status: UploadStatus;
+  error?: string;
+};
+
 type PhotoManagerProps = {
   collectionId: string;
   initialPhotos: PhotoItem[];
@@ -32,6 +41,10 @@ export function PhotoManager({
   const [coverPhotoId, setCoverPhotoId] = useState(initialCoverPhotoId);
   const [error, setError] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [batchItems, setBatchItems] = useState<BatchUploadItem[]>([]);
+  const [batchUploading, setBatchUploading] = useState(false);
+
+  const uploadBusy = uploading || batchUploading;
 
   async function handleSetCover(photoId: string) {
     const response = await fetch(`/api/admin/collections/${collectionId}/cover`, {
@@ -80,6 +93,72 @@ export function PhotoManager({
     setPhotos((current) => [...current, photo].sort((a, b) => a.sortOrder - b.sortOrder));
     setAlt("");
     router.refresh();
+  }
+
+  function updateBatchItem(id: string, patch: Partial<BatchUploadItem>) {
+    setBatchItems((current) =>
+      current.map((item) => (item.id === id ? { ...item, ...patch } : item)),
+    );
+  }
+
+  async function handleBatchUpload(event: ChangeEvent<HTMLInputElement>) {
+    const files = event.target.files;
+    if (!files?.length) return;
+
+    const items: BatchUploadItem[] = Array.from(files).map((file) => ({
+      id: crypto.randomUUID(),
+      fileName: file.name,
+      status: "pending",
+    }));
+
+    setBatchItems(items);
+    setBatchUploading(true);
+    setError(null);
+    event.target.value = "";
+
+    const uploadedPhotos: PhotoItem[] = [];
+
+    for (let index = 0; index < files.length; index++) {
+      const file = files[index];
+      const item = items[index];
+
+      updateBatchItem(item.id, { status: "uploading" });
+
+      const formData = new FormData();
+      formData.append("collectionId", collectionId);
+      formData.append("file", file);
+
+      const response = await fetch("/api/admin/photos/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => null);
+        updateBatchItem(item.id, {
+          status: "error",
+          error: data?.error ?? "Upload failed.",
+        });
+        continue;
+      }
+
+      const photo = await response.json();
+      uploadedPhotos.push(photo);
+      updateBatchItem(item.id, { status: "success" });
+    }
+
+    if (uploadedPhotos.length > 0) {
+      setPhotos((current) =>
+        [...current, ...uploadedPhotos].sort((a, b) => a.sortOrder - b.sortOrder),
+      );
+      router.refresh();
+    }
+
+    setBatchUploading(false);
+  }
+
+  function clearBatchItems() {
+    setBatchItems([]);
   }
 
   async function handleDelete(photoId: string) {
@@ -153,6 +232,62 @@ export function PhotoManager({
     );
   }
 
+  const batchTotal = batchItems.length;
+  const batchCompleted = batchItems.filter(
+    (item) => item.status === "success" || item.status === "error",
+  ).length;
+  const batchSuccessCount = batchItems.filter((item) => item.status === "success").length;
+  const batchErrorCount = batchItems.filter((item) => item.status === "error").length;
+  const batchProgress = batchTotal > 0 ? (batchCompleted / batchTotal) * 100 : 0;
+
+  function batchSummary() {
+    if (batchUploading) {
+      const inProgress =
+        batchSuccessCount +
+        batchErrorCount +
+        (batchItems.some((item) => item.status === "uploading") ? 1 : 0);
+      return `Uploading ${inProgress} of ${batchTotal}`;
+    }
+
+    const parts: string[] = [];
+    if (batchSuccessCount > 0) {
+      parts.push(`${batchSuccessCount} uploaded`);
+    }
+    if (batchErrorCount > 0) {
+      parts.push(`${batchErrorCount} failed`);
+    }
+    return parts.join(", ") || "Upload complete";
+  }
+
+  function statusBadge(item: BatchUploadItem) {
+    switch (item.status) {
+      case "pending":
+        return (
+          <span className="rounded-full bg-neutral-800 px-2.5 py-0.5 text-xs text-[#A1A1A6]">
+            Pending
+          </span>
+        );
+      case "uploading":
+        return (
+          <span className="rounded-full bg-[#C8A97E]/20 px-2.5 py-0.5 text-xs text-[#C8A97E]">
+            Uploading…
+          </span>
+        );
+      case "success":
+        return (
+          <span className="rounded-full bg-emerald-500/20 px-2.5 py-0.5 text-xs text-emerald-300">
+            Success
+          </span>
+        );
+      case "error":
+        return (
+          <span className="rounded-full bg-red-500/20 px-2.5 py-0.5 text-xs text-red-300">
+            Failed
+          </span>
+        );
+    }
+  }
+
   return (
     <div className="space-y-8">
       {!cloudinaryConfigured ? (
@@ -164,26 +299,85 @@ export function PhotoManager({
 
       <div className="rounded-3xl border border-neutral-800 bg-[#111111] p-6">
         <h2 className="mb-4 text-xl font-medium">Upload photo</h2>
-        <div className="grid gap-4 md:grid-cols-[1fr_auto]">
+        <div className="grid gap-4 md:grid-cols-[1fr_auto_auto]">
           <input
             type="text"
             value={alt}
             onChange={(event) => setAlt(event.target.value)}
             placeholder="Alt text (optional)"
-            className="w-full rounded-xl border border-neutral-800 bg-[#0F0F0F] px-4 py-3 text-[#F5F5F7] outline-none transition focus:border-[#C8A97E]"
+            disabled={uploadBusy}
+            className="w-full rounded-xl border border-neutral-800 bg-[#0F0F0F] px-4 py-3 text-[#F5F5F7] outline-none transition focus:border-[#C8A97E] disabled:opacity-60"
           />
-          <label className="inline-flex cursor-pointer items-center justify-center rounded-xl border border-[#C8A97E] px-6 py-3 font-medium text-[#F5F5F7] transition hover:bg-[#C8A97E] hover:text-black">
+          <label
+            className={`inline-flex items-center justify-center rounded-xl border border-[#C8A97E] px-6 py-3 font-medium text-[#F5F5F7] transition hover:bg-[#C8A97E] hover:text-black ${uploadBusy || !cloudinaryConfigured ? "pointer-events-none opacity-60" : "cursor-pointer"}`}
+          >
             {uploading ? "Uploading..." : "Choose file"}
             <input
               type="file"
               accept="image/*"
-              disabled={!cloudinaryConfigured || uploading}
+              disabled={!cloudinaryConfigured || uploadBusy}
               onChange={handleUpload}
+              className="hidden"
+            />
+          </label>
+          <label
+            className={`inline-flex items-center justify-center rounded-xl border border-neutral-700 px-6 py-3 font-medium text-[#F5F5F7] transition hover:border-[#C8A97E] hover:text-[#C8A97E] ${uploadBusy || !cloudinaryConfigured ? "pointer-events-none opacity-60" : "cursor-pointer"}`}
+          >
+            {batchUploading ? "Uploading batch..." : "Batch upload"}
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              disabled={!cloudinaryConfigured || uploadBusy}
+              onChange={handleBatchUpload}
               className="hidden"
             />
           </label>
         </div>
       </div>
+
+      {batchItems.length > 0 ? (
+        <div className="rounded-3xl border border-neutral-800 bg-[#111111] p-6">
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h2 className="text-xl font-medium">Batch upload status</h2>
+              <p className="mt-1 text-sm text-[#A1A1A6]">{batchSummary()}</p>
+            </div>
+            <button
+              type="button"
+              onClick={clearBatchItems}
+              disabled={batchUploading}
+              className="rounded-xl border border-neutral-700 px-4 py-2 text-sm text-[#A1A1A6] transition hover:text-[#F5F5F7] disabled:opacity-60"
+            >
+              Clear
+            </button>
+          </div>
+
+          <div className="mb-4 h-2 overflow-hidden rounded-full bg-neutral-800">
+            <div
+              className="h-full rounded-full bg-[#C8A97E] transition-all duration-300"
+              style={{ width: `${batchProgress}%` }}
+            />
+          </div>
+
+          <ul className="max-h-60 space-y-2 overflow-y-auto">
+            {batchItems.map((item) => (
+              <li
+                key={item.id}
+                className="flex items-start justify-between gap-4 rounded-xl border border-neutral-800 bg-[#0F0F0F] px-4 py-3"
+              >
+                <div className="min-w-0">
+                  <p className="truncate text-sm text-[#F5F5F7]">{item.fileName}</p>
+                  {item.error ? (
+                    <p className="mt-1 text-xs text-red-400">{item.error}</p>
+                  ) : null}
+                </div>
+                {statusBadge(item)}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
 
       {error ? <p className="text-sm text-red-400">{error}</p> : null}
 
