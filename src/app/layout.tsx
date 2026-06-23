@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
 import { SessionProvider } from "@/components/providers/SessionProvider";
+import { auth } from "@/lib/auth";
 import { buildSiteMetadata } from "@/lib/seo";
 import { getSiteSettings } from "@/lib/site";
 
@@ -28,7 +29,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const settings = await getSiteSettings();
+  const [settings, session] = await Promise.all([getSiteSettings(), auth()]);
 
   return (
     <html
@@ -40,7 +41,7 @@ export default async function RootLayout({
         className="min-h-full flex flex-col bg-background text-foreground"
         suppressHydrationWarning
       >
-        <SessionProvider>
+        <SessionProvider session={session}>
           <Navbar siteTitle={settings.siteTitle} />
           <div className="flex-1">{children}</div>
           <Footer

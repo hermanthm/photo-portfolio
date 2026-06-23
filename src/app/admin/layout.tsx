@@ -14,7 +14,7 @@ export default async function AdminLayout({
   const [session, settings] = await Promise.all([auth(), getSiteSettings()]);
 
   return (
-    <SessionProvider>
+    <SessionProvider session={session}>
       <div className="min-h-screen bg-[#050505] text-[#F5F5F7]">
         {session ? (
           <header className="border-b border-neutral-800/80">
