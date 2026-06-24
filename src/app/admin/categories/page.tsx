@@ -16,7 +16,8 @@ export default async function AdminCategoriesPage() {
           <h1 className="text-4xl font-medium">Manage categories</h1>
           <p className="mt-3 max-w-2xl text-[#A1A1A6]">
             Group collections on the Photography and Video pages under labels like
-            Event, Product, Advertising, and Portrait.
+            Event, Product, Advertising, and Portrait. Mark each category for
+            Photography, Video, or both.
           </p>
         </div>
         <Link
@@ -27,7 +28,10 @@ export default async function AdminCategoriesPage() {
         </Link>
       </div>
 
-      <CategoryManager initialCategories={categories} />
+      <CategoryManager
+        key={categories.map((category) => `${category.id}:${category.sortOrder}`).join(",")}
+        initialCategories={categories}
+      />
     </div>
   );
 }

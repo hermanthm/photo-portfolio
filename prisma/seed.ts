@@ -77,11 +77,11 @@ async function main() {
   });
 
   const categorySeeds = [
-    { slug: "event", name: "Event", sortOrder: 0 },
-    { slug: "product", name: "Product", sortOrder: 1 },
-    { slug: "advertising", name: "Advertising", sortOrder: 2 },
-    { slug: "portrait", name: "Portrait", sortOrder: 3 },
-    { slug: "other", name: "Other", sortOrder: 4 },
+    { slug: "event", name: "Event", scope: "photography" as const, sortOrder: 0 },
+    { slug: "product", name: "Product", scope: "photography" as const, sortOrder: 1 },
+    { slug: "advertising", name: "Advertising", scope: "both" as const, sortOrder: 2 },
+    { slug: "portrait", name: "Portrait", scope: "photography" as const, sortOrder: 3 },
+    { slug: "other", name: "Other", scope: "both" as const, sortOrder: 4 },
   ] as const;
 
   const categories: Record<string, { id: string }> = {};
@@ -91,6 +91,7 @@ async function main() {
       where: { slug: category.slug },
       update: {
         name: category.name,
+        scope: category.scope,
         sortOrder: category.sortOrder,
       },
       create: category,

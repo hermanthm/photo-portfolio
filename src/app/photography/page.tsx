@@ -18,7 +18,7 @@ export default async function PhotographyPage() {
   const photoCollections = collections.filter(
     (collection) => collection.type === "photo" || collection.type === "mixed",
   );
-  const groups = groupCollectionsByCategory(photoCollections);
+  const groups = groupCollectionsByCategory(photoCollections, "photography");
 
   return (
     <main className="mx-auto max-w-6xl px-6 pt-32 pb-24">

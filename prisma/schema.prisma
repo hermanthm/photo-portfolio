@@ -24,6 +24,12 @@ enum VideoProvider {
   other
 }
 
+enum WorkCategoryScope {
+  photography
+  video
+  both
+}
+
 model User {
   id           String   @id @default(cuid())
   email        String   @unique
@@ -34,10 +40,11 @@ model User {
 }
 
 model WorkCategory {
-  id          String       @id @default(cuid())
+  id          String            @id @default(cuid())
   name        String
-  slug        String       @unique
-  sortOrder   Int          @default(0)
+  slug        String            @unique
+  scope       WorkCategoryScope @default(both)
+  sortOrder   Int               @default(0)
   collections Collection[]
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt

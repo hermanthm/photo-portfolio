@@ -12,6 +12,6 @@ export async function getAllWorkCategories() {
 export async function getWorkCategoriesForSelect() {
   return db.workCategory.findMany({
     orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
-    select: { id: true, name: true, slug: true },
+    select: { id: true, name: true, slug: true, scope: true },
   });
 }

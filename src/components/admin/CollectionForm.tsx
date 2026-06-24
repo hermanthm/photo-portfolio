@@ -4,10 +4,15 @@ import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 
 import { slugify } from "@/lib/slug";
+import {
+  categoriesForCollectionType,
+  type WorkCategoryScope,
+} from "@/lib/work-category-scope";
 
 type CategoryOption = {
   id: string;
   name: string;
+  scope: WorkCategoryScope;
 };
 
 type CollectionFormValues = {
@@ -55,6 +60,10 @@ export function CollectionForm({
   const [slugTouched, setSlugTouched] = useState(mode === "edit");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const visibleCategories = categories.filter((category) =>
+    categoriesForCollectionType(category.scope, values.type),
+  );
 
   function updateField<K extends keyof CollectionFormValues>(
     key: K,
@@ -170,7 +179,7 @@ export function CollectionForm({
             className="w-full rounded-xl border border-neutral-800 bg-[#0F0F0F] px-4 py-3 text-[#F5F5F7] outline-none transition focus:border-[#C8A97E]"
           >
             <option value="">Uncategorized</option>
-            {categories.map((category) => (
+            {visibleCategories.map((category) => (
               <option key={category.id} value={category.id}>
                 {category.name}
               </option>

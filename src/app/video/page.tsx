@@ -20,7 +20,7 @@ export default async function VideoPage() {
       (collection.type === "video" || collection.type === "mixed") &&
       collection.videos.length > 0,
   );
-  const groups = groupCollectionsByCategory(videoCollections);
+  const groups = groupCollectionsByCategory(videoCollections, "video");
 
   return (
     <main className="mx-auto max-w-6xl px-6 pt-32 pb-24">

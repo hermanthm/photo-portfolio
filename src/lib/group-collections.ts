@@ -1,4 +1,9 @@
 import type { CollectionCoverSource } from "@/lib/collection-cover";
+import {
+  categoryScopeAppliesToPage,
+  type WorkCategoryPage,
+  type WorkCategoryScope,
+} from "@/lib/work-category-scope";
 
 export type GroupedCollection = CollectionCoverSource & {
   id: string;
@@ -11,6 +16,7 @@ export type GroupedCollection = CollectionCoverSource & {
     id: string;
     name: string;
     slug: string;
+    scope: WorkCategoryScope;
     sortOrder: number;
   } | null;
 };
@@ -27,19 +33,23 @@ const UNCATEGORIZED_ID = "__uncategorized__";
 
 export function groupCollectionsByCategory(
   collections: GroupedCollection[],
+  page?: WorkCategoryPage,
 ): CollectionCategoryGroup[] {
   const buckets = new Map<string, CollectionCategoryGroup>();
 
   for (const collection of collections) {
     const category = collection.category;
-    const key = category?.id ?? UNCATEGORIZED_ID;
+    const appliesToPage =
+      !page || !category || categoryScopeAppliesToPage(category.scope, page);
+    const effectiveCategory = appliesToPage ? category : null;
+    const key = effectiveCategory?.id ?? UNCATEGORIZED_ID;
 
     if (!buckets.has(key)) {
       buckets.set(key, {
         id: key,
-        name: category?.name ?? "Other",
-        slug: category?.slug ?? "other",
-        sortOrder: category?.sortOrder ?? 9999,
+        name: effectiveCategory?.name ?? "Other",
+        slug: effectiveCategory?.slug ?? "other",
+        sortOrder: effectiveCategory?.sortOrder ?? 9999,
         collections: [],
       });
     }
