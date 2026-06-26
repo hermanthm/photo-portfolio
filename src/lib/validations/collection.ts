@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { COVER_ASPECT_RATIOS } from "@/lib/cover-frame";
+
 export const collectionSchema = z.object({
   title: z.string().min(1).max(120),
   slug: z
@@ -33,3 +35,11 @@ export const collectionCoverSchema = z
   );
 
 export type CollectionCoverInput = z.infer<typeof collectionCoverSchema>;
+
+export const collectionCoverFrameSchema = z.object({
+  coverAspectRatio: z.enum(COVER_ASPECT_RATIOS),
+  coverFocalX: z.number().int().min(0).max(100),
+  coverFocalY: z.number().int().min(0).max(100),
+});
+
+export type CollectionCoverFrameInput = z.infer<typeof collectionCoverFrameSchema>;

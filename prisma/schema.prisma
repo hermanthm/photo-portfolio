@@ -30,6 +30,14 @@ enum WorkCategoryScope {
   both
 }
 
+enum CoverAspectRatio {
+  ratio_16_10
+  ratio_4_3
+  ratio_3_2
+  ratio_1_1
+  ratio_21_9
+}
+
 model User {
   id           String   @id @default(cuid())
   email        String   @unique
@@ -68,6 +76,9 @@ model Collection {
   coverPhoto   Photo?         @relation("CollectionCoverPhoto", fields: [coverPhotoId], references: [id], onDelete: SetNull)
   coverVideoId String?        @unique
   coverVideo   Video?         @relation("CollectionCoverVideo", fields: [coverVideoId], references: [id], onDelete: SetNull)
+  coverAspectRatio CoverAspectRatio @default(ratio_16_10)
+  coverFocalX      Int              @default(50)
+  coverFocalY      Int              @default(50)
   photos       Photo[]
   videos       Video[]
   createdAt    DateTime       @default(now())

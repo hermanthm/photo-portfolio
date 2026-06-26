@@ -69,6 +69,9 @@ export default async function HomePage() {
                 description={collection.description}
                 type={collection.type}
                 coverUrl={getCollectionCoverUrl(collection)}
+                coverAspectRatio={collection.coverAspectRatio}
+                coverFocalX={collection.coverFocalX}
+                coverFocalY={collection.coverFocalY}
               />
             ))}
           </div>

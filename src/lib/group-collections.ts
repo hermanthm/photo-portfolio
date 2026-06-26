@@ -1,4 +1,5 @@
 import type { CollectionCoverSource } from "@/lib/collection-cover";
+import type { CoverAspectRatio } from "@/lib/cover-frame";
 import {
   categoryScopeAppliesToPage,
   type WorkCategoryPage,
@@ -12,6 +13,9 @@ export type GroupedCollection = CollectionCoverSource & {
   description: string | null;
   type: string;
   sortOrder: number;
+  coverAspectRatio: CoverAspectRatio;
+  coverFocalX: number;
+  coverFocalY: number;
   category: {
     id: string;
     name: string;

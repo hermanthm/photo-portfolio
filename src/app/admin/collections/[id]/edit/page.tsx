@@ -71,10 +71,15 @@ export default async function EditCollectionPage({
       <div className="mt-10">
         <CoverImagePicker
           collectionId={collection.id}
+          collectionTitle={collection.title}
+          collectionType={collection.type}
           photos={collection.photos}
           videos={collection.videos}
           coverPhotoId={collection.coverPhotoId}
           coverVideoId={collection.coverVideoId}
+          coverAspectRatio={collection.coverAspectRatio}
+          coverFocalX={collection.coverFocalX}
+          coverFocalY={collection.coverFocalY}
         />
       </div>
 

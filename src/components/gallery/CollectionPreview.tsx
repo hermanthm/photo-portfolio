@@ -1,12 +1,25 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import {
+  coverAspectRatioToCss,
+  coverFocalToObjectPosition,
+  DEFAULT_COVER_ASPECT_RATIO,
+  DEFAULT_COVER_FOCAL_X,
+  DEFAULT_COVER_FOCAL_Y,
+  type CoverAspectRatio,
+} from "@/lib/cover-frame";
+
 type CollectionPreviewProps = {
   slug: string;
   title: string;
   description: string | null;
   type: string;
   coverUrl: string | null;
+  coverAspectRatio?: CoverAspectRatio;
+  coverFocalX?: number;
+  coverFocalY?: number;
+  disableLink?: boolean;
 };
 
 export function CollectionPreview({
@@ -15,24 +28,35 @@ export function CollectionPreview({
   description,
   type,
   coverUrl,
+  coverAspectRatio = DEFAULT_COVER_ASPECT_RATIO,
+  coverFocalX = DEFAULT_COVER_FOCAL_X,
+  coverFocalY = DEFAULT_COVER_FOCAL_Y,
+  disableLink = false,
 }: CollectionPreviewProps) {
-  return (
-    <Link
-      href={`/work/${slug}`}
-      className="group overflow-hidden rounded-3xl border border-neutral-800/50 bg-[#111111] transition hover:border-[#C8A97E]/30"
-    >
+  const aspectRatio = coverAspectRatioToCss(coverAspectRatio);
+  const objectPosition = coverFocalToObjectPosition(coverFocalX, coverFocalY);
+
+  const content = (
+    <>
       {coverUrl ? (
-        <div className="relative aspect-[16/10] overflow-hidden bg-[#1A1A1A]">
+        <div
+          className="relative overflow-hidden bg-[#1A1A1A]"
+          style={{ aspectRatio }}
+        >
           <Image
             src={coverUrl}
             alt={title}
             fill
             className="object-cover transition duration-500 group-hover:scale-105"
+            style={{ objectPosition }}
             sizes="(max-width: 768px) 100vw, 50vw"
           />
         </div>
       ) : (
-        <div className="flex aspect-[16/10] items-center justify-center bg-[#1A1A1A] text-[#C8A97E]">
+        <div
+          className="flex items-center justify-center bg-[#1A1A1A] text-[#C8A97E]"
+          style={{ aspectRatio }}
+        >
           No media yet
         </div>
       )}
@@ -46,6 +70,23 @@ export function CollectionPreview({
           <p className="mt-3 line-clamp-2 text-[#A1A1A6]">{description}</p>
         ) : null}
       </div>
+    </>
+  );
+
+  if (disableLink) {
+    return (
+      <div className="overflow-hidden rounded-3xl border border-neutral-800/50 bg-[#111111]">
+        {content}
+      </div>
+    );
+  }
+
+  return (
+    <Link
+      href={`/work/${slug}`}
+      className="group overflow-hidden rounded-3xl border border-neutral-800/50 bg-[#111111] transition hover:border-[#C8A97E]/30"
+    >
+      {content}
     </Link>
   );
 }
