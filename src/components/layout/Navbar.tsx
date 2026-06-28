@@ -1,14 +1,9 @@
 import Link from "next/link";
 
 import { AdminSessionMenu } from "@/components/layout/AdminSessionMenu";
+import { MobileNav } from "@/components/layout/MobileNav";
 import { SecretDoor } from "@/components/layout/SecretDoor";
-
-const links = [
-  { href: "/photography", label: "Photography" },
-  { href: "/video", label: "Video" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
-];
+import { publicNavLinks } from "@/lib/nav-links";
 
 export function Navbar({ siteTitle }: { siteTitle: string }) {
   return (
@@ -18,9 +13,9 @@ export function Navbar({ siteTitle }: { siteTitle: string }) {
           siteTitle={siteTitle}
           className="text-lg font-medium tracking-tight text-[#F5F5F7]"
         />
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-3 md:gap-6">
           <nav className="hidden items-center gap-8 text-sm text-[#A1A1A6] md:flex">
-            {links.map((link) => (
+            {publicNavLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
@@ -30,6 +25,7 @@ export function Navbar({ siteTitle }: { siteTitle: string }) {
               </Link>
             ))}
           </nav>
+          <MobileNav />
           <AdminSessionMenu />
         </div>
       </div>

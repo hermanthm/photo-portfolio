@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 
+import { PhotoProtection } from "@/components/gallery/PhotoProtection";
 import type { GalleryPhoto, GalleryVideo } from "@/components/gallery/types";
 
 type Slide =
@@ -13,6 +14,7 @@ type MediaSlideshowProps = {
   photos: GalleryPhoto[];
   videos: GalleryVideo[];
   collectionTitle: string;
+  protectPhotos?: boolean;
   initialIndex?: number;
 };
 
@@ -27,6 +29,7 @@ export function MediaSlideshow({
   photos,
   videos,
   collectionTitle,
+  protectPhotos = false,
   initialIndex = 0,
 }: MediaSlideshowProps) {
   const slides = buildSlides(photos, videos);
@@ -67,14 +70,17 @@ export function MediaSlideshow({
       <div className="relative overflow-hidden rounded-3xl border border-neutral-800 bg-[#111111]">
         <div className="relative aspect-[16/10] bg-[#0A0A0A] md:aspect-[16/9]">
           {current.type === "photo" ? (
-            <Image
-              src={current.photo.url}
-              alt={current.photo.alt ?? collectionTitle}
-              fill
-              className="object-contain"
-              sizes="100vw"
-              priority
-            />
+            <PhotoProtection enabled={protectPhotos} className="absolute inset-0">
+              <Image
+                src={current.photo.url}
+                alt={current.photo.alt ?? collectionTitle}
+                fill
+                className="object-contain"
+                sizes="100vw"
+                priority
+                draggable={false}
+              />
+            </PhotoProtection>
           ) : (
             <iframe
               src={current.video.embedUrl}
@@ -151,13 +157,16 @@ export function MediaSlideshow({
               }`}
             >
               {slide.type === "photo" ? (
-                <Image
-                  src={slide.photo.url}
-                  alt=""
-                  fill
-                  className="object-cover"
-                  sizes="96px"
-                />
+                <PhotoProtection enabled={protectPhotos} className="absolute inset-0">
+                  <Image
+                    src={slide.photo.url}
+                    alt=""
+                    fill
+                    className="object-cover"
+                    sizes="96px"
+                    draggable={false}
+                  />
+                </PhotoProtection>
               ) : slide.video.thumbnailUrl ? (
                 <Image
                   src={slide.video.thumbnailUrl}

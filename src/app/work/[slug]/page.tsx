@@ -44,6 +44,7 @@ export default async function WorkPage({ params }: WorkPageProps) {
         photos={collection.photos}
         videos={collection.videos}
         collectionTitle={collection.title}
+        protectPhotos={collection.protectPhotos}
       />
     </main>
   );

@@ -14,6 +14,7 @@ export const collectionSchema = z.object({
   defaultView: z.enum(["slideshow"]).default("slideshow"),
   published: z.boolean(),
   featured: z.boolean(),
+  protectPhotos: z.boolean(),
   sortOrder: z.number().int().min(0),
   categoryId: z.string().cuid().nullable().optional(),
 });

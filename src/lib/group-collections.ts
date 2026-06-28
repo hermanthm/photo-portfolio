@@ -12,6 +12,7 @@ export type GroupedCollection = CollectionCoverSource & {
   title: string;
   description: string | null;
   type: string;
+  protectPhotos: boolean;
   sortOrder: number;
   coverAspectRatio: CoverAspectRatio;
   coverFocalX: number;

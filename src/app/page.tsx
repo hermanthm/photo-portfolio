@@ -72,6 +72,7 @@ export default async function HomePage() {
                 coverAspectRatio={collection.coverAspectRatio}
                 coverFocalX={collection.coverFocalX}
                 coverFocalY={collection.coverFocalY}
+                protectPhotos={collection.protectPhotos}
               />
             ))}
           </div>

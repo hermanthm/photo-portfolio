@@ -69,6 +69,7 @@ model Collection {
   defaultView  DefaultView    @default(mosaic)
   published    Boolean        @default(false)
   featured     Boolean        @default(false)
+  protectPhotos Boolean       @default(false)
   sortOrder    Int            @default(0)
   categoryId   String?
   category     WorkCategory?  @relation(fields: [categoryId], references: [id], onDelete: SetNull)

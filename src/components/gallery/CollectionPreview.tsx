@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { PhotoProtection } from "@/components/gallery/PhotoProtection";
+
 import {
   coverAspectRatioToCss,
   coverFocalToObjectPosition,
@@ -19,6 +21,7 @@ type CollectionPreviewProps = {
   coverAspectRatio?: CoverAspectRatio;
   coverFocalX?: number;
   coverFocalY?: number;
+  protectPhotos?: boolean;
   disableLink?: boolean;
 };
 
@@ -31,6 +34,7 @@ export function CollectionPreview({
   coverAspectRatio = DEFAULT_COVER_ASPECT_RATIO,
   coverFocalX = DEFAULT_COVER_FOCAL_X,
   coverFocalY = DEFAULT_COVER_FOCAL_Y,
+  protectPhotos = false,
   disableLink = false,
 }: CollectionPreviewProps) {
   const aspectRatio = coverAspectRatioToCss(coverAspectRatio);
@@ -43,14 +47,17 @@ export function CollectionPreview({
           className="relative overflow-hidden bg-[#1A1A1A]"
           style={{ aspectRatio }}
         >
-          <Image
-            src={coverUrl}
-            alt={title}
-            fill
-            className="object-cover transition duration-500 group-hover:scale-105"
-            style={{ objectPosition }}
-            sizes="(max-width: 768px) 100vw, 50vw"
-          />
+          <PhotoProtection enabled={protectPhotos} className="absolute inset-0">
+            <Image
+              src={coverUrl}
+              alt={title}
+              fill
+              className="object-cover transition duration-500 group-hover:scale-105"
+              style={{ objectPosition }}
+              sizes="(max-width: 768px) 100vw, 50vw"
+              draggable={false}
+            />
+          </PhotoProtection>
         </div>
       ) : (
         <div

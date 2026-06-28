@@ -63,6 +63,7 @@ export default async function EditCollectionPage({
           defaultView: "slideshow",
           published: collection.published,
           featured: collection.featured,
+          protectPhotos: collection.protectPhotos,
           sortOrder: collection.sortOrder,
           categoryId: collection.categoryId ?? "",
         }}

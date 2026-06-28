@@ -1,0 +1,1 @@
+ALTER TABLE "Collection" ADD COLUMN "protectPhotos" BOOLEAN NOT NULL DEFAULT false;

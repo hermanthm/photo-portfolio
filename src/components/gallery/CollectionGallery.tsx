@@ -5,12 +5,14 @@ type CollectionGalleryProps = {
   photos: GalleryPhoto[];
   videos: GalleryVideo[];
   collectionTitle: string;
+  protectPhotos?: boolean;
 };
 
 export function CollectionGallery({
   photos,
   videos,
   collectionTitle,
+  protectPhotos = false,
 }: CollectionGalleryProps) {
   const hasPhotos = photos.length > 0;
   const hasVideos = videos.length > 0;
@@ -29,6 +31,7 @@ export function CollectionGallery({
         photos={photos}
         videos={videos}
         collectionTitle={collectionTitle}
+        protectPhotos={protectPhotos}
       />
     </div>
   );

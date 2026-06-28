@@ -23,6 +23,7 @@ type CollectionFormValues = {
   defaultView: "slideshow";
   published: boolean;
   featured: boolean;
+  protectPhotos: boolean;
   sortOrder: number;
   categoryId: string;
 };
@@ -42,6 +43,7 @@ const defaultValues: CollectionFormValues = {
   defaultView: "slideshow",
   published: false,
   featured: false,
+  protectPhotos: false,
   sortOrder: 0,
   categoryId: "",
 };
@@ -221,7 +223,26 @@ export function CollectionForm({
           />
           Featured on homepage
         </label>
+
+        <label className="flex items-center gap-3 text-sm text-[#A1A1A6]">
+          <input
+            type="checkbox"
+            checked={values.protectPhotos}
+            onChange={(event) =>
+              updateField("protectPhotos", event.target.checked)
+            }
+            className="h-4 w-4 rounded border-neutral-700 bg-[#0F0F0F] accent-[#C8A97E]"
+          />
+          Protect photos (disable download &amp; copy)
+        </label>
       </div>
+
+      {values.protectPhotos ? (
+        <p className="text-sm text-[#A1A1A6]">
+          Visitors cannot right-click, drag, or copy photos on the public gallery
+          and collection previews. Image URLs remain accessible via browser tools.
+        </p>
+      ) : null}
 
       {error ? <p className="text-sm text-red-400">{error}</p> : null}
 
