@@ -78,7 +78,6 @@ export function MediaSlideshow({
                 className="object-contain"
                 sizes="100vw"
                 priority
-                draggable={false}
               />
             </PhotoProtection>
           ) : (
@@ -164,7 +163,6 @@ export function MediaSlideshow({
                     fill
                     className="object-cover"
                     sizes="96px"
-                    draggable={false}
                   />
                 </PhotoProtection>
               ) : slide.video.thumbnailUrl ? (

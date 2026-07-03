@@ -55,7 +55,6 @@ export function CollectionPreview({
               className="object-cover transition duration-500 group-hover:scale-105"
               style={{ objectPosition }}
               sizes="(max-width: 768px) 100vw, 50vw"
-              draggable={false}
             />
           </PhotoProtection>
         </div>
