@@ -126,6 +126,7 @@ model SiteSettings {
   id            String   @id @default("default")
   siteTitle     String   @default("Photo Portfolio")
   bio           String?
+  aboutContent  String?
   footerTagline String?
   contactBlurb  String?
   contactEmail  String?

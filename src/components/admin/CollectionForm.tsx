@@ -122,18 +122,18 @@ export function CollectionForm({
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid gap-6 md:grid-cols-2">
         <label className="block space-y-2">
-          <span className="text-sm text-[#A1A1A6]">Title</span>
+          <span className="ui-label">Title</span>
           <input
             type="text"
             value={values.title}
             onChange={(event) => updateField("title", event.target.value)}
             required
-            className="w-full rounded-xl border border-neutral-800 bg-[#0F0F0F] px-4 py-3 text-[#F5F5F7] outline-none transition focus:border-[#C8A97E]"
+            className="ui-input"
           />
         </label>
 
         <label className="block space-y-2">
-          <span className="text-sm text-[#A1A1A6]">Slug</span>
+          <span className="ui-label">Slug</span>
           <input
             type="text"
             value={values.slug}
@@ -142,30 +142,30 @@ export function CollectionForm({
               updateField("slug", slugify(event.target.value));
             }}
             required
-            className="w-full rounded-xl border border-neutral-800 bg-[#0F0F0F] px-4 py-3 text-[#F5F5F7] outline-none transition focus:border-[#C8A97E]"
+            className="ui-input"
           />
         </label>
       </div>
 
       <label className="block space-y-2">
-        <span className="text-sm text-[#A1A1A6]">Description</span>
+        <span className="ui-label">Description</span>
         <textarea
           value={values.description}
           onChange={(event) => updateField("description", event.target.value)}
           rows={4}
-          className="w-full rounded-xl border border-neutral-800 bg-[#0F0F0F] px-4 py-3 text-[#F5F5F7] outline-none transition focus:border-[#C8A97E]"
+          className="ui-input"
         />
       </label>
 
       <div className="grid gap-6 md:grid-cols-3">
         <label className="block space-y-2">
-          <span className="text-sm text-[#A1A1A6]">Type</span>
+          <span className="ui-label">Type</span>
           <select
             value={values.type}
             onChange={(event) =>
               updateField("type", event.target.value as CollectionFormValues["type"])
             }
-            className="w-full rounded-xl border border-neutral-800 bg-[#0F0F0F] px-4 py-3 text-[#F5F5F7] outline-none transition focus:border-[#C8A97E]"
+            className="ui-input"
           >
             <option value="photo">Photo</option>
             <option value="video">Video</option>
@@ -174,11 +174,11 @@ export function CollectionForm({
         </label>
 
         <label className="block space-y-2">
-          <span className="text-sm text-[#A1A1A6]">Work category</span>
+          <span className="ui-label">Work category</span>
           <select
             value={values.categoryId}
             onChange={(event) => updateField("categoryId", event.target.value)}
-            className="w-full rounded-xl border border-neutral-800 bg-[#0F0F0F] px-4 py-3 text-[#F5F5F7] outline-none transition focus:border-[#C8A97E]"
+            className="ui-input"
           >
             <option value="">Uncategorized</option>
             {visibleCategories.map((category) => (
@@ -190,7 +190,7 @@ export function CollectionForm({
         </label>
 
         <label className="block space-y-2">
-          <span className="text-sm text-[#A1A1A6]">Sort order</span>
+          <span className="ui-label">Sort order</span>
           <input
             type="number"
             min={0}
@@ -198,58 +198,58 @@ export function CollectionForm({
             onChange={(event) =>
               updateField("sortOrder", Number(event.target.value))
             }
-            className="w-full rounded-xl border border-neutral-800 bg-[#0F0F0F] px-4 py-3 text-[#F5F5F7] outline-none transition focus:border-[#C8A97E]"
+            className="ui-input"
           />
         </label>
       </div>
 
       <div className="flex flex-wrap gap-6">
-        <label className="flex items-center gap-3 text-sm text-[#A1A1A6]">
+        <label className="flex items-center gap-3 ui-label">
           <input
             type="checkbox"
             checked={values.published}
             onChange={(event) => updateField("published", event.target.checked)}
-            className="h-4 w-4 rounded border-neutral-700 bg-[#0F0F0F] accent-[#C8A97E]"
+            className="h-4 w-4 rounded border-border-strong bg-surface-elevated accent-accent"
           />
           Published
         </label>
 
-        <label className="flex items-center gap-3 text-sm text-[#A1A1A6]">
+        <label className="flex items-center gap-3 ui-label">
           <input
             type="checkbox"
             checked={values.featured}
             onChange={(event) => updateField("featured", event.target.checked)}
-            className="h-4 w-4 rounded border-neutral-700 bg-[#0F0F0F] accent-[#C8A97E]"
+            className="h-4 w-4 rounded border-border-strong bg-surface-elevated accent-accent"
           />
           Featured on homepage
         </label>
 
-        <label className="flex items-center gap-3 text-sm text-[#A1A1A6]">
+        <label className="flex items-center gap-3 ui-label">
           <input
             type="checkbox"
             checked={values.protectPhotos}
             onChange={(event) =>
               updateField("protectPhotos", event.target.checked)
             }
-            className="h-4 w-4 rounded border-neutral-700 bg-[#0F0F0F] accent-[#C8A97E]"
+            className="h-4 w-4 rounded border-border-strong bg-surface-elevated accent-accent"
           />
           Protect photos (disable right-click &amp; copy)
         </label>
       </div>
 
       {values.protectPhotos ? (
-        <p className="text-sm text-[#A1A1A6]">
+        <p className="ui-label">
           Visitors cannot right-click or copy photos on the public gallery and
           collection previews. Image URLs remain accessible via browser tools.
         </p>
       ) : null}
 
-      {error ? <p className="text-sm text-red-400">{error}</p> : null}
+      {error ? <p className="ui-error">{error}</p> : null}
 
       <button
         type="submit"
         disabled={loading}
-        className="rounded-xl border border-[#C8A97E] px-6 py-3 font-medium text-[#F5F5F7] transition hover:bg-[#C8A97E] hover:text-black disabled:opacity-60"
+        className="ui-btn-primary"
       >
         {loading
           ? "Saving..."

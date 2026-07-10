@@ -45,34 +45,34 @@ export function LoginForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
       <label className="block space-y-2">
-        <span className="text-sm text-[#A1A1A6]">Email</span>
+        <span className="ui-label">Email</span>
         <input
           type="email"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
           required
-          className="w-full rounded-xl border border-neutral-800 bg-[#0F0F0F] px-4 py-3 text-[#F5F5F7] outline-none transition focus:border-[#C8A97E]"
+          className="ui-input"
         />
       </label>
 
       <label className="block space-y-2">
-        <span className="text-sm text-[#A1A1A6]">Password</span>
+        <span className="ui-label">Password</span>
         <input
           type="password"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
           required
           minLength={8}
-          className="w-full rounded-xl border border-neutral-800 bg-[#0F0F0F] px-4 py-3 text-[#F5F5F7] outline-none transition focus:border-[#C8A97E]"
+          className="ui-input"
         />
       </label>
 
-      {error ? <p className="text-sm text-red-400">{error}</p> : null}
+      {error ? <p className="ui-error">{error}</p> : null}
 
       <button
         type="submit"
         disabled={loading}
-        className="w-full rounded-xl border border-[#C8A97E] px-4 py-3 font-medium text-[#F5F5F7] transition hover:bg-[#C8A97E] hover:text-black disabled:opacity-60"
+        className="ui-btn-primary-full"
       >
         {loading ? "Signing in..." : "Sign in"}
       </button>

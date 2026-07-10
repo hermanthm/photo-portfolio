@@ -20,7 +20,7 @@ export function CollectionGallery({
   return (
     <div className="mt-16 space-y-10">
       {hasPhotos || hasVideos ? (
-        <p className="text-sm text-[#A1A1A6]">
+        <p className="ui-label">
           {hasPhotos ? `${photos.length} photos` : null}
           {hasPhotos && hasVideos ? " · " : null}
           {hasVideos ? `${videos.length} videos` : null}

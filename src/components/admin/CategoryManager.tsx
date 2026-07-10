@@ -45,7 +45,7 @@ function ScopeBadge({ scope }: { scope: WorkCategoryScope }) {
   return (
     <div className="mt-3 flex flex-wrap gap-2">
       {photography ? (
-        <span className="rounded-full border border-[#C8A97E]/40 bg-[#C8A97E]/10 px-2.5 py-0.5 text-xs text-[#C8A97E]">
+        <span className="rounded-full border border-accent/40 bg-foreground/5 px-2.5 py-0.5 text-xs text-accent">
           Photography
         </span>
       ) : null}
@@ -55,7 +55,7 @@ function ScopeBadge({ scope }: { scope: WorkCategoryScope }) {
         </span>
       ) : null}
       {scope === "both" ? (
-        <span className="rounded-full border border-neutral-700 px-2.5 py-0.5 text-xs text-[#A1A1A6]">
+        <span className="rounded-full border border-border-strong px-2.5 py-0.5 ui-helper">
           Shared
         </span>
       ) : null}
@@ -235,15 +235,15 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
     <div className="space-y-10">
       <form
         onSubmit={handleSubmit}
-        className="rounded-3xl border border-neutral-800 bg-[#111111] p-6 space-y-6"
+        className="ui-card-padded space-y-6"
       >
-        <h2 className="text-xl font-medium text-[#F5F5F7]">
+        <h2 className="text-xl font-medium text-foreground">
           {editingId ? "Edit category" : "Add category"}
         </h2>
 
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
           <label className="block space-y-2 md:col-span-1">
-            <span className="text-sm text-[#A1A1A6]">Name</span>
+            <span className="ui-label">Name</span>
             <input
               type="text"
               value={form.name}
@@ -256,12 +256,12 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
                 }));
               }}
               required
-              className="w-full rounded-xl border border-neutral-800 bg-[#0F0F0F] px-4 py-3 text-[#F5F5F7] outline-none transition focus:border-[#C8A97E]"
+              className="ui-input"
             />
           </label>
 
           <label className="block space-y-2 md:col-span-1">
-            <span className="text-sm text-[#A1A1A6]">Slug</span>
+            <span className="ui-label">Slug</span>
             <input
               type="text"
               value={form.slug}
@@ -273,12 +273,12 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
                 }));
               }}
               required
-              className="w-full rounded-xl border border-neutral-800 bg-[#0F0F0F] px-4 py-3 text-[#F5F5F7] outline-none transition focus:border-[#C8A97E]"
+              className="ui-input"
             />
           </label>
 
           <label className="block space-y-2 md:col-span-1">
-            <span className="text-sm text-[#A1A1A6]">Shows on</span>
+            <span className="ui-label">Shows on</span>
             <select
               value={form.scope}
               onChange={(event) =>
@@ -287,7 +287,7 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
                   scope: event.target.value as WorkCategoryScope,
                 }))
               }
-              className="w-full rounded-xl border border-neutral-800 bg-[#0F0F0F] px-4 py-3 text-[#F5F5F7] outline-none transition focus:border-[#C8A97E]"
+              className="ui-input"
             >
               {WORK_CATEGORY_SCOPES.map((scope) => (
                 <option key={scope} value={scope}>
@@ -298,7 +298,7 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
           </label>
 
           <label className="block space-y-2 md:col-span-1">
-            <span className="text-sm text-[#A1A1A6]">Sort order</span>
+            <span className="ui-label">Sort order</span>
             <input
               type="number"
               min={0}
@@ -309,18 +309,18 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
                   sortOrder: Number(event.target.value),
                 }))
               }
-              className="w-full rounded-xl border border-neutral-800 bg-[#0F0F0F] px-4 py-3 text-[#F5F5F7] outline-none transition focus:border-[#C8A97E]"
+              className="ui-input"
             />
           </label>
         </div>
 
-        {error ? <p className="text-sm text-red-400">{error}</p> : null}
+        {error ? <p className="ui-error">{error}</p> : null}
 
         <div className="flex flex-wrap gap-3">
           <button
             type="submit"
             disabled={loading}
-            className="rounded-xl border border-[#C8A97E] px-6 py-3 font-medium text-[#F5F5F7] transition hover:bg-[#C8A97E] hover:text-black disabled:opacity-60"
+            className="ui-btn-primary"
           >
             {loading ? "Saving..." : editingId ? "Save changes" : "Add category"}
           </button>
@@ -328,7 +328,7 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
             <button
               type="button"
               onClick={resetForm}
-              className="rounded-xl border border-neutral-700 px-6 py-3 text-[#A1A1A6] transition hover:text-[#F5F5F7]"
+              className="ui-btn-ghost-lg"
             >
               Cancel edit
             </button>
@@ -337,7 +337,7 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
       </form>
 
       {categories.length === 0 ? (
-        <div className="rounded-3xl border border-neutral-800 bg-[#111111] p-8 text-[#A1A1A6]">
+        <div className="ui-card-padded-lg text-muted">
           No categories yet. Add Event, Product, Advertising, Portrait, or any labels you use.
         </div>
       ) : (
@@ -345,7 +345,7 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
           {categories.map((category, index) => (
             <div
               key={category.id}
-              className="flex flex-col gap-4 rounded-3xl border border-neutral-800 bg-[#111111] p-6 md:flex-row md:items-center md:justify-between"
+              className="flex flex-col gap-4 ui-card-padded md:flex-row md:items-center md:justify-between"
             >
               <div className="flex items-start gap-4">
                 <ReorderButtons
@@ -355,8 +355,8 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
                   disableDown={index === categories.length - 1 || reordering}
                 />
                 <div>
-                  <h3 className="text-2xl font-medium text-[#F5F5F7]">{category.name}</h3>
-                  <p className="mt-2 text-sm text-[#A1A1A6]">
+                  <h3 className="text-2xl font-medium text-foreground">{category.name}</h3>
+                  <p className="mt-2 ui-label">
                     /{category.slug} · {category._count.collections} collection(s)
                   </p>
                   <ScopeBadge scope={category.scope} />
@@ -367,14 +367,14 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
                 <button
                   type="button"
                   onClick={() => startEdit(category)}
-                  className="rounded-full border border-[#C8A97E] px-4 py-2 text-[#F5F5F7] transition hover:bg-[#C8A97E] hover:text-black"
+                  className="rounded-full border border-accent px-4 py-2 text-foreground transition hover:bg-accent hover:text-inverse"
                 >
                   Edit
                 </button>
                 <button
                   type="button"
                   onClick={() => handleDelete(category)}
-                  className="rounded-full border border-red-500/40 px-4 py-2 text-red-300 transition hover:bg-red-500/10"
+                  className="ui-btn-danger"
                 >
                   Delete
                 </button>

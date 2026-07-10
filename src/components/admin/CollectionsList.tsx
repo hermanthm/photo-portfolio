@@ -59,13 +59,13 @@ export function CollectionsList({
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-4 rounded-3xl border border-neutral-800 bg-[#111111] p-6 sm:flex-row sm:items-end sm:justify-between">
+      <div className="flex flex-col gap-4 ui-card-padded sm:flex-row sm:items-end sm:justify-between">
         <label className="block min-w-[220px] flex-1 space-y-2">
-          <span className="text-sm text-[#A1A1A6]">Filter by category</span>
+          <span className="ui-label">Filter by category</span>
           <select
             value={filter}
             onChange={(event) => setFilter(event.target.value)}
-            className="w-full rounded-xl border border-neutral-800 bg-[#0F0F0F] px-4 py-3 text-[#F5F5F7] outline-none transition focus:border-[#C8A97E]"
+            className="ui-input"
           >
             <option value="all">All categories</option>
             <option value="uncategorized">Uncategorized</option>
@@ -78,14 +78,14 @@ export function CollectionsList({
         </label>
 
         {isFiltered ? (
-          <p className="text-sm text-[#A1A1A6]">
+          <p className="ui-label">
             {filteredCollections.length} of {initialCollections.length} collections
           </p>
         ) : null}
       </div>
 
       {filteredCollections.length === 0 ? (
-        <div className="rounded-3xl border border-neutral-800 bg-[#111111] p-8 text-[#A1A1A6]">
+        <div className="ui-card-padded-lg text-muted">
           {isFiltered
             ? "No collections in this category."
             : "No collections yet. Create your first collection to get started."}
@@ -98,10 +98,10 @@ export function CollectionsList({
             return (
               <div
                 key={collection.id}
-                className="flex flex-col gap-4 rounded-3xl border border-neutral-800 bg-[#111111] p-6 md:flex-row md:items-center md:justify-between"
+                className="flex flex-col gap-4 ui-card-padded md:flex-row md:items-center md:justify-between"
               >
                 {coverUrl ? (
-                  <div className="relative h-20 w-32 shrink-0 overflow-hidden rounded-2xl bg-[#1A1A1A]">
+                  <div className="relative h-20 w-32 shrink-0 overflow-hidden rounded-2xl bg-media">
                     <Image
                       src={coverUrl}
                       alt={collection.title}
@@ -111,20 +111,20 @@ export function CollectionsList({
                     />
                   </div>
                 ) : (
-                  <div className="flex h-20 w-32 shrink-0 items-center justify-center rounded-2xl bg-[#1A1A1A] text-xs text-[#A1A1A6]">
+                  <div className="flex h-20 w-32 shrink-0 items-center justify-center rounded-2xl bg-media ui-helper">
                     No cover
                   </div>
                 )}
                 <div className="flex-1">
                   <div className="mb-2 flex flex-wrap items-center gap-3">
-                    <h2 className="text-2xl font-medium text-[#F5F5F7]">
+                    <h2 className="text-2xl font-medium text-foreground">
                       {collection.title}
                     </h2>
-                    <span className="rounded-full border border-neutral-700 px-3 py-1 text-xs uppercase tracking-[0.15em] text-[#A1A1A6]">
+                    <span className="rounded-full border border-border-strong px-3 py-1 text-xs uppercase tracking-[0.15em] text-muted">
                       {collection.type}
                     </span>
                     {collection.category ? (
-                      <span className="rounded-full border border-[#C8A97E]/30 px-3 py-1 text-xs text-[#C8A97E]">
+                      <span className="rounded-full border border-accent/30 px-3 py-1 text-xs text-accent">
                         {collection.category.name}
                       </span>
                     ) : null}
@@ -133,13 +133,13 @@ export function CollectionsList({
                         Published
                       </span>
                     ) : (
-                      <span className="rounded-full border border-neutral-700 px-3 py-1 text-xs text-[#A1A1A6]">
+                      <span className="rounded-full border border-border-strong px-3 py-1 ui-helper">
                         Draft
                       </span>
                     )}
                   </div>
-                  <p className="text-[#A1A1A6]">{collection.description}</p>
-                  <p className="mt-2 text-sm text-[#A1A1A6]">
+                  <p className="text-muted">{collection.description}</p>
+                  <p className="mt-2 ui-label">
                     {collection._count.photos} photos · {collection._count.videos} videos
                   </p>
                 </div>
@@ -147,25 +147,25 @@ export function CollectionsList({
                 <div className="flex flex-wrap gap-3 text-sm">
                   <Link
                     href={`/admin/collections/${collection.id}/edit`}
-                    className="rounded-full border border-[#C8A97E] px-4 py-2 text-[#F5F5F7] transition hover:bg-[#C8A97E] hover:text-black"
+                    className="rounded-full border border-accent px-4 py-2 text-foreground transition hover:bg-accent hover:text-inverse"
                   >
                     Edit
                   </Link>
                   <Link
                     href={`/admin/collections/${collection.id}/photos`}
-                    className="rounded-full border border-neutral-700 px-4 py-2 text-[#A1A1A6] transition hover:text-[#F5F5F7]"
+                    className="rounded-full border border-border-strong px-4 py-2 text-muted transition hover:text-foreground"
                   >
                     Photos
                   </Link>
                   <Link
                     href={`/admin/collections/${collection.id}/videos`}
-                    className="rounded-full border border-neutral-700 px-4 py-2 text-[#A1A1A6] transition hover:text-[#F5F5F7]"
+                    className="rounded-full border border-border-strong px-4 py-2 text-muted transition hover:text-foreground"
                   >
                     Videos
                   </Link>
                   <Link
                     href={`/work/${collection.slug}`}
-                    className="rounded-full border border-neutral-700 px-4 py-2 text-[#A1A1A6] transition hover:text-[#F5F5F7]"
+                    className="rounded-full border border-border-strong px-4 py-2 text-muted transition hover:text-foreground"
                   >
                     View
                   </Link>

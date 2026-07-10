@@ -1,5 +1,8 @@
 import { z } from "zod";
 
+export const BIO_MAX_LENGTH = 500;
+export const ABOUT_CONTENT_MAX_LENGTH = 2500;
+
 const optionalUrl = z
   .string()
   .url()
@@ -9,7 +12,12 @@ const optionalUrl = z
 
 export const siteSettingsSchema = z.object({
   siteTitle: z.string().min(1).max(80),
-  bio: z.string().max(500).optional().nullable(),
+  bio: z.string().max(BIO_MAX_LENGTH).optional().nullable(),
+  aboutContent: z
+    .string()
+    .max(ABOUT_CONTENT_MAX_LENGTH)
+    .optional()
+    .nullable(),
   footerTagline: z.string().max(160).optional().nullable(),
   contactBlurb: z.string().max(300).optional().nullable(),
   contactEmail: z

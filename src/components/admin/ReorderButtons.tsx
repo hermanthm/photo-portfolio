@@ -17,7 +17,7 @@ export function ReorderButtons({
         type="button"
         onClick={onMoveUp}
         disabled={disableUp}
-        className="rounded-xl border border-neutral-700 px-3 py-2 text-sm text-[#A1A1A6] transition hover:text-[#F5F5F7] disabled:opacity-40"
+        className="ui-btn-ghost px-3 py-2 disabled:opacity-40"
         aria-label="Move up"
       >
         ↑
@@ -26,7 +26,7 @@ export function ReorderButtons({
         type="button"
         onClick={onMoveDown}
         disabled={disableDown}
-        className="rounded-xl border border-neutral-700 px-3 py-2 text-sm text-[#A1A1A6] transition hover:text-[#F5F5F7] disabled:opacity-40"
+        className="ui-btn-ghost px-3 py-2 disabled:opacity-40"
         aria-label="Move down"
       >
         ↓

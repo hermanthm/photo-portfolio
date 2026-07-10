@@ -13,7 +13,7 @@ export function CollectionCategorySections({
 }: CollectionCategorySectionsProps) {
   if (groups.length === 0) {
     return (
-      <p className="mt-16 text-lg text-[#A1A1A6]">{emptyMessage}</p>
+      <p className="mt-16 text-lg text-muted">{emptyMessage}</p>
     );
   }
 
@@ -21,7 +21,7 @@ export function CollectionCategorySections({
     <div className="mt-16 space-y-20">
       {groups.map((group) => (
         <section key={group.id} id={group.slug}>
-          <h2 className="text-sm uppercase tracking-[0.2em] text-[#C8A97E]">
+          <h2 className="ui-eyebrow">
             {group.name}
           </h2>
           <div className="mt-8 grid gap-8 md:grid-cols-2">

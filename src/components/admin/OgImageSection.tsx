@@ -64,20 +64,20 @@ export function OgImageSection({
   }
 
   return (
-    <div className="space-y-4 rounded-3xl border border-neutral-800 bg-[#111111] p-6">
-      <h2 className="text-lg font-medium text-[#F5F5F7]">Social preview image</h2>
-      <p className="text-sm text-[#A1A1A6]">
+    <div className="space-y-4 ui-card-padded">
+      <h2 className="text-lg font-medium text-foreground">Social preview image</h2>
+      <p className="ui-label">
         Used for Open Graph and Twitter cards when your site is shared.
       </p>
 
       {!cloudinaryConfigured ? (
-        <div className="rounded-2xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
+        <div className="ui-alert-warning">
           Cloudinary is not configured. Add credentials to `.env` before uploading.
         </div>
       ) : null}
 
       {ogImageUrl ? (
-        <div className="relative aspect-[1200/630] max-w-lg overflow-hidden rounded-2xl bg-[#1A1A1A]">
+        <div className="relative aspect-[1200/630] max-w-lg overflow-hidden rounded-2xl bg-media">
           <Image
             src={ogImageUrl}
             alt="OG preview"
@@ -87,11 +87,11 @@ export function OgImageSection({
           />
         </div>
       ) : (
-        <p className="text-sm text-[#A1A1A6]">No OG image uploaded yet.</p>
+        <p className="ui-label">No OG image uploaded yet.</p>
       )}
 
       <div className="flex flex-wrap gap-3">
-        <label className="inline-flex cursor-pointer items-center justify-center rounded-xl border border-[#C8A97E] px-5 py-2 text-sm font-medium text-[#F5F5F7] transition hover:bg-[#C8A97E] hover:text-black">
+        <label className="inline-flex cursor-pointer items-center justify-center rounded-xl border border-accent px-5 py-2 text-sm font-medium text-foreground transition hover:bg-accent hover:text-inverse">
           {uploading ? "Uploading..." : ogImageUrl ? "Replace image" : "Upload image"}
           <input
             type="file"
@@ -106,14 +106,14 @@ export function OgImageSection({
           <button
             type="button"
             onClick={handleRemove}
-            className="rounded-xl border border-red-500/40 px-5 py-2 text-sm text-red-300 transition hover:bg-red-500/10"
+            className="ui-btn-danger-lg"
           >
             Remove
           </button>
         ) : null}
       </div>
 
-      {error ? <p className="text-sm text-red-400">{error}</p> : null}
+      {error ? <p className="ui-error">{error}</p> : null}
     </div>
   );
 }

@@ -280,13 +280,13 @@ export function PhotoManager({
     switch (item.status) {
       case "pending":
         return (
-          <span className="rounded-full bg-neutral-800 px-2.5 py-0.5 text-xs text-[#A1A1A6]">
+          <span className="rounded-full bg-border px-2.5 py-0.5 ui-helper">
             Pending
           </span>
         );
       case "uploading":
         return (
-          <span className="rounded-full bg-[#C8A97E]/20 px-2.5 py-0.5 text-xs text-[#C8A97E]">
+          <span className="rounded-full bg-foreground/5 px-2.5 py-0.5 text-xs text-accent">
             Uploading…
           </span>
         );
@@ -298,7 +298,7 @@ export function PhotoManager({
         );
       case "error":
         return (
-          <span className="rounded-full bg-red-500/20 px-2.5 py-0.5 text-xs text-red-300">
+          <span className="rounded-full border border-error/20 bg-error/10 px-2.5 py-0.5 text-xs text-error">
             Failed
           </span>
         );
@@ -308,13 +308,13 @@ export function PhotoManager({
   return (
     <div className="space-y-8">
       {!cloudinaryConfigured ? (
-        <div className="rounded-2xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
+        <div className="ui-alert-warning">
           Cloudinary is not configured. Add `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`,
           and `CLOUDINARY_API_SECRET` to `.env` before uploading photos.
         </div>
       ) : null}
 
-      <div className="rounded-3xl border border-neutral-800 bg-[#111111] p-6">
+      <div className="ui-card-padded">
         <h2 className="mb-4 text-xl font-medium">Upload photo</h2>
         <div className="grid gap-4 md:grid-cols-[1fr_auto_auto]">
           <input
@@ -323,10 +323,10 @@ export function PhotoManager({
             onChange={(event) => setAlt(event.target.value)}
             placeholder="Alt text (optional)"
             disabled={uploadBusy}
-            className="w-full rounded-xl border border-neutral-800 bg-[#0F0F0F] px-4 py-3 text-[#F5F5F7] outline-none transition focus:border-[#C8A97E] disabled:opacity-60"
+            className="ui-input disabled:opacity-60"
           />
           <label
-            className={`inline-flex items-center justify-center rounded-xl border border-[#C8A97E] px-6 py-3 font-medium text-[#F5F5F7] transition hover:bg-[#C8A97E] hover:text-black ${uploadBusy || !cloudinaryConfigured ? "pointer-events-none opacity-60" : "cursor-pointer"}`}
+            className={`inline-flex items-center justify-center rounded-xl border border-accent px-6 py-3 font-medium text-foreground transition hover:bg-accent hover:text-inverse ${uploadBusy || !cloudinaryConfigured ? "pointer-events-none opacity-60" : "cursor-pointer"}`}
           >
             {uploading ? "Uploading..." : "Choose file"}
             <input
@@ -338,7 +338,7 @@ export function PhotoManager({
             />
           </label>
           <label
-            className={`inline-flex items-center justify-center rounded-xl border border-neutral-700 px-6 py-3 font-medium text-[#F5F5F7] transition hover:border-[#C8A97E] hover:text-[#C8A97E] ${uploadBusy || !cloudinaryConfigured ? "pointer-events-none opacity-60" : "cursor-pointer"}`}
+            className={`inline-flex items-center justify-center rounded-xl border border-border-strong px-6 py-3 font-medium text-foreground transition hover:border-accent hover:text-accent ${uploadBusy || !cloudinaryConfigured ? "pointer-events-none opacity-60" : "cursor-pointer"}`}
           >
             {batchUploading ? "Uploading batch..." : "Batch upload"}
             <input
@@ -354,25 +354,25 @@ export function PhotoManager({
       </div>
 
       {batchItems.length > 0 ? (
-        <div className="rounded-3xl border border-neutral-800 bg-[#111111] p-6">
+        <div className="ui-card-padded">
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
             <div>
               <h2 className="text-xl font-medium">Batch upload status</h2>
-              <p className="mt-1 text-sm text-[#A1A1A6]">{batchSummary()}</p>
+              <p className="mt-1 ui-label">{batchSummary()}</p>
             </div>
             <button
               type="button"
               onClick={clearBatchItems}
               disabled={batchUploading}
-              className="rounded-xl border border-neutral-700 px-4 py-2 text-sm text-[#A1A1A6] transition hover:text-[#F5F5F7] disabled:opacity-60"
+              className="ui-btn-ghost disabled:opacity-60"
             >
               Clear
             </button>
           </div>
 
-          <div className="mb-4 h-2 overflow-hidden rounded-full bg-neutral-800">
+          <div className="ui-progress-track mb-4">
             <div
-              className="h-full rounded-full bg-[#C8A97E] transition-all duration-300"
+              className="ui-progress-bar"
               style={{ width: `${batchProgress}%` }}
             />
           </div>
@@ -381,12 +381,12 @@ export function PhotoManager({
             {batchItems.map((item) => (
               <li
                 key={item.id}
-                className="flex items-start justify-between gap-4 rounded-xl border border-neutral-800 bg-[#0F0F0F] px-4 py-3"
+                className="flex items-start justify-between gap-4 rounded-xl border border-border bg-surface-elevated px-4 py-3"
               >
                 <div className="min-w-0">
-                  <p className="truncate text-sm text-[#F5F5F7]">{item.fileName}</p>
+                  <p className="truncate text-sm text-foreground">{item.fileName}</p>
                   {item.error ? (
-                    <p className="mt-1 text-xs text-red-400">{item.error}</p>
+                    <p className="mt-1 text-xs text-error">{item.error}</p>
                   ) : null}
                 </div>
                 {statusBadge(item)}
@@ -396,16 +396,16 @@ export function PhotoManager({
         </div>
       ) : null}
 
-      {error ? <p className="text-sm text-red-400">{error}</p> : null}
+      {error ? <p className="ui-error">{error}</p> : null}
 
       {photos.length === 0 ? (
-        <p className="text-[#A1A1A6]">No photos yet.</p>
+        <p className="text-muted">No photos yet.</p>
       ) : (
         <div className="grid gap-6">
           {photos.map((photo, index) => (
             <div
               key={photo.id}
-              className="grid gap-4 rounded-3xl border border-neutral-800 bg-[#111111] p-4 md:grid-cols-[auto_180px_1fr_auto]"
+              className="grid gap-4 rounded-3xl border border-border bg-surface p-4 md:grid-cols-[auto_180px_1fr_auto]"
             >
               <ReorderButtons
                 onMoveUp={() => movePhoto(photo.id, -1)}
@@ -413,7 +413,7 @@ export function PhotoManager({
                 disableUp={index === 0}
                 disableDown={index === photos.length - 1}
               />
-              <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-[#1A1A1A]">
+              <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-media">
                 <Image
                   src={photo.url}
                   alt={photo.alt ?? "Photo"}
@@ -422,7 +422,7 @@ export function PhotoManager({
                   sizes="180px"
                 />
                 {coverPhotoId === photo.id ? (
-                  <span className="absolute top-2 left-2 rounded-full bg-[#C8A97E] px-2 py-0.5 text-xs font-medium text-black">
+                  <span className="absolute top-2 left-2 rounded-full bg-accent px-2 py-0.5 text-xs font-medium text-inverse">
                     Cover
                   </span>
                 ) : null}
@@ -430,15 +430,15 @@ export function PhotoManager({
 
               <div className="space-y-3">
                 <label className="block space-y-2">
-                  <span className="text-sm text-[#A1A1A6]">Alt text</span>
+                  <span className="ui-label">Alt text</span>
                   <input
                     type="text"
                     defaultValue={photo.alt ?? ""}
                     onBlur={(event) => handleAltChange(photo.id, event.target.value)}
-                    className="w-full rounded-xl border border-neutral-800 bg-[#0F0F0F] px-4 py-3 text-[#F5F5F7] outline-none transition focus:border-[#C8A97E]"
+                    className="ui-input"
                   />
                 </label>
-                <p className="text-sm text-[#A1A1A6]">Sort order: {photo.sortOrder}</p>
+                <p className="ui-label">Sort order: {photo.sortOrder}</p>
               </div>
 
               <div className="flex h-fit flex-col gap-2">
@@ -446,7 +446,7 @@ export function PhotoManager({
                   <button
                     type="button"
                     onClick={() => handleSetCover(photo.id)}
-                    className="rounded-xl border border-neutral-700 px-4 py-2 text-sm text-[#A1A1A6] transition hover:text-[#F5F5F7]"
+                    className="ui-btn-ghost"
                   >
                     Set as cover
                   </button>
@@ -454,7 +454,7 @@ export function PhotoManager({
                 <button
                   type="button"
                   onClick={() => handleDelete(photo.id)}
-                  className="rounded-xl border border-red-500/40 px-4 py-2 text-sm text-red-300 transition hover:bg-red-500/10"
+                  className="ui-btn-danger"
                 >
                   Delete
                 </button>

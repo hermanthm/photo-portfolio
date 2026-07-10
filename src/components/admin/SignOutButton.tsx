@@ -7,7 +7,7 @@ export function SignOutButton() {
     <button
       type="button"
       onClick={() => signOut({ callbackUrl: "/admin/login" })}
-      className="text-sm text-[#A1A1A6] transition hover:text-[#F5F5F7]"
+      className="ui-label transition hover:text-foreground"
     >
       Sign out
     </button>

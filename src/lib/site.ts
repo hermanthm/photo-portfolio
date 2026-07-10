@@ -13,6 +13,7 @@ export async function getSiteSettings() {
       id: SETTINGS_ID,
       siteTitle: "Photo Portfolio",
       bio: null,
+      aboutContent: null,
       footerTagline: null,
       contactBlurb: null,
       contactEmail: null,
@@ -42,6 +43,7 @@ export async function updateSiteSettings(data: SiteSettingsInput) {
     update: {
       siteTitle: data.siteTitle,
       bio: data.bio ?? null,
+      aboutContent: data.aboutContent ?? null,
       footerTagline: data.footerTagline ?? null,
       contactBlurb: data.contactBlurb ?? null,
       contactEmail: data.contactEmail ?? null,
@@ -53,6 +55,7 @@ export async function updateSiteSettings(data: SiteSettingsInput) {
       id: SETTINGS_ID,
       siteTitle: data.siteTitle,
       bio: data.bio ?? null,
+      aboutContent: data.aboutContent ?? null,
       footerTagline: data.footerTagline ?? null,
       contactBlurb: data.contactBlurb ?? null,
       contactEmail: data.contactEmail ?? null,

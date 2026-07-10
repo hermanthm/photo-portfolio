@@ -30,7 +30,7 @@ export function SocialLinks({
           href={values[link.key]!}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-[#C8A97E] transition hover:text-[#F5F5F7]"
+          className="text-accent transition hover:text-foreground"
         >
           {link.label}
         </a>

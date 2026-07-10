@@ -7,17 +7,17 @@ export default async function AdminLoginPage() {
   const settings = await getSiteSettings();
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-6">
-      <div className="w-full max-w-md rounded-3xl border border-neutral-800 bg-[#111111] p-8">
-        <p className="mb-2 text-sm uppercase tracking-[0.2em] text-[#C8A97E]">
+    <div className="ui-login-shell">
+      <div className="ui-login-card">
+        <p className="mb-2 ui-eyebrow">
           {settings.siteTitle}
         </p>
-        <h1 className="mb-2 text-3xl font-medium text-[#F5F5F7]">Sign in</h1>
-        <p className="mb-8 text-[#A1A1A6]">
+        <h1 className="mb-2 text-3xl font-medium text-foreground">Sign in</h1>
+        <p className="mb-8 text-muted">
           {settings.footerTagline ??
             "Sign in to manage collections, photos, and videos."}
         </p>
-        <Suspense fallback={<p className="text-[#A1A1A6]">Loading...</p>}>
+        <Suspense fallback={<p className="text-muted">Loading...</p>}>
           <LoginForm />
         </Suspense>
       </div>

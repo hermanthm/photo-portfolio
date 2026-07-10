@@ -29,7 +29,7 @@ export default async function EditCollectionPage({
     <div className="mx-auto max-w-4xl px-6 py-12">
       <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
         <div>
-          <p className="mb-2 text-sm uppercase tracking-[0.2em] text-[#C8A97E]">
+          <p className="mb-2 ui-eyebrow">
             Collections
           </p>
           <h1 className="text-4xl font-medium">Edit collection</h1>
@@ -38,13 +38,13 @@ export default async function EditCollectionPage({
           <AdminCategoriesShortcut />
           <Link
             href={`/admin/collections/${collection.id}/photos`}
-            className="rounded-full border border-neutral-700 px-4 py-2 text-[#A1A1A6] transition hover:text-[#F5F5F7]"
+            className="rounded-full border border-border-strong px-4 py-2 text-muted transition hover:text-foreground"
           >
             Manage photos
           </Link>
           <Link
             href={`/admin/collections/${collection.id}/videos`}
-            className="rounded-full border border-neutral-700 px-4 py-2 text-[#A1A1A6] transition hover:text-[#F5F5F7]"
+            className="rounded-full border border-border-strong px-4 py-2 text-muted transition hover:text-foreground"
           >
             Manage videos
           </Link>
@@ -84,7 +84,7 @@ export default async function EditCollectionPage({
         />
       </div>
 
-      <div className="mt-10 border-t border-neutral-800 pt-8">
+      <div className="mt-10 border-t border-border pt-8">
         <DeleteCollectionButton
           collectionId={collection.id}
           collectionTitle={collection.title}

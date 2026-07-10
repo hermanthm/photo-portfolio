@@ -44,7 +44,7 @@ export function CollectionPreview({
     <>
       {coverUrl ? (
         <div
-          className="relative overflow-hidden bg-[#1A1A1A]"
+          className="relative overflow-hidden bg-media"
           style={{ aspectRatio }}
         >
           <PhotoProtection enabled={protectPhotos} className="absolute inset-0">
@@ -60,7 +60,7 @@ export function CollectionPreview({
         </div>
       ) : (
         <div
-          className="flex items-center justify-center bg-[#1A1A1A] text-[#C8A97E]"
+          className="flex items-center justify-center bg-media text-accent"
           style={{ aspectRatio }}
         >
           No media yet
@@ -68,12 +68,12 @@ export function CollectionPreview({
       )}
 
       <div className="p-6 md:p-8">
-        <p className="mb-2 text-sm uppercase tracking-[0.15em] text-[#C8A97E]">
+        <p className="mb-2 text-sm uppercase tracking-[0.15em] text-accent">
           {type}
         </p>
-        <h3 className="text-2xl font-medium text-[#F5F5F7]">{title}</h3>
+        <h3 className="text-2xl font-medium text-foreground">{title}</h3>
         {description ? (
-          <p className="mt-3 line-clamp-2 text-[#A1A1A6]">{description}</p>
+          <p className="mt-3 line-clamp-2 text-muted">{description}</p>
         ) : null}
       </div>
     </>
@@ -81,7 +81,7 @@ export function CollectionPreview({
 
   if (disableLink) {
     return (
-      <div className="overflow-hidden rounded-3xl border border-neutral-800/50 bg-[#111111]">
+      <div className="overflow-hidden rounded-3xl border border-border/50 bg-surface">
         {content}
       </div>
     );
@@ -90,7 +90,7 @@ export function CollectionPreview({
   return (
     <Link
       href={`/work/${slug}`}
-      className="group overflow-hidden rounded-3xl border border-neutral-800/50 bg-[#111111] transition hover:border-[#C8A97E]/30"
+      className="group overflow-hidden rounded-3xl border border-border/50 bg-surface transition hover:border-accent/30"
     >
       {content}
     </Link>

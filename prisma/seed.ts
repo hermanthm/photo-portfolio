@@ -3,6 +3,10 @@ import "dotenv/config";
 import { PrismaPg } from "@prisma/adapter-pg";
 import bcrypt from "bcryptjs";
 
+import {
+  DEFAULT_ABOUT_CONTENT,
+  DEFAULT_SHORT_BIO,
+} from "../src/lib/default-about-content";
 import { createPgPool } from "../src/lib/pg-pool";
 import { PrismaClient } from "../src/generated/prisma/client";
 
@@ -81,7 +85,8 @@ async function main() {
     where: { id: "default" },
     update: {
       siteTitle: "Herman Tong — Photography & Film",
-      bio: "Visual storyteller capturing landscapes, portraits, and cinematic motion.",
+      bio: DEFAULT_SHORT_BIO,
+      aboutContent: DEFAULT_ABOUT_CONTENT,
       footerTagline: "Photography and cinematic video work.",
       contactBlurb: "Reach out to discuss photography or film projects.",
       contactEmail: adminEmail,
@@ -89,7 +94,8 @@ async function main() {
     create: {
       id: "default",
       siteTitle: "Herman Tong — Photography & Film",
-      bio: "Visual storyteller capturing landscapes, portraits, and cinematic motion.",
+      bio: DEFAULT_SHORT_BIO,
+      aboutContent: DEFAULT_ABOUT_CONTENT,
       footerTagline: "Photography and cinematic video work.",
       contactBlurb: "Reach out to discuss photography or film projects.",
       contactEmail: adminEmail,

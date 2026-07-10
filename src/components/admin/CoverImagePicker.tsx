@@ -158,11 +158,11 @@ export function CoverImagePicker({
 
   return (
     <div className="space-y-6">
-      <div className="space-y-4 rounded-3xl border border-neutral-800 bg-[#111111] p-6">
+      <div className="space-y-4 ui-card-padded">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h2 className="text-xl font-medium text-[#F5F5F7]">Cover image</h2>
-            <p className="mt-1 text-sm text-[#A1A1A6]">
+            <h2 className="text-xl font-medium text-foreground">Cover image</h2>
+            <p className="mt-1 ui-label">
               Shown on collection previews. Choose a photo or video thumbnail, or use
               automatic (first item).
             </p>
@@ -171,14 +171,14 @@ export function CoverImagePicker({
             type="button"
             disabled={loading || isAutomatic}
             onClick={() => updateCover({ photoId: null, videoId: null })}
-            className="rounded-xl border border-neutral-700 px-4 py-2 text-sm text-[#A1A1A6] transition hover:text-[#F5F5F7] disabled:opacity-50"
+            className="ui-btn-ghost"
           >
             Use automatic
           </button>
         </div>
 
         {!hasMedia ? (
-          <p className="text-sm text-[#A1A1A6]">
+          <p className="ui-label">
             Add photos or videos first, then pick a cover here.
           </p>
         ) : (
@@ -193,8 +193,8 @@ export function CoverImagePicker({
                   onClick={() => updateCover({ photoId: photo.id })}
                   className={`group relative aspect-[4/3] overflow-hidden rounded-2xl border-2 transition ${
                     isSelected
-                      ? "border-[#C8A97E]"
-                      : "border-transparent hover:border-[#C8A97E]/50"
+                      ? "border-accent"
+                      : "border-transparent hover:border-accent/50"
                   }`}
                 >
                   <Image
@@ -205,7 +205,7 @@ export function CoverImagePicker({
                     sizes="200px"
                   />
                   {isSelected ? (
-                    <span className="absolute top-2 left-2 rounded-full bg-[#C8A97E] px-2 py-0.5 text-xs font-medium text-black">
+                    <span className="absolute top-2 left-2 rounded-full bg-accent px-2 py-0.5 text-xs font-medium text-inverse">
                       Cover
                     </span>
                   ) : null}
@@ -223,8 +223,8 @@ export function CoverImagePicker({
                   onClick={() => updateCover({ videoId: video.id })}
                   className={`group relative aspect-[4/3] overflow-hidden rounded-2xl border-2 transition ${
                     isSelected
-                      ? "border-[#C8A97E]"
-                      : "border-transparent hover:border-[#C8A97E]/50"
+                      ? "border-accent"
+                      : "border-transparent hover:border-accent/50"
                   }`}
                 >
                   <Image
@@ -234,11 +234,11 @@ export function CoverImagePicker({
                     className="object-cover"
                     sizes="200px"
                   />
-                  <span className="absolute right-2 bottom-2 rounded bg-black/70 px-2 py-0.5 text-xs text-[#F5F5F7]">
+                  <span className="absolute right-2 bottom-2 rounded bg-black/70 px-2 py-0.5 text-xs text-foreground">
                     Video
                   </span>
                   {isSelected ? (
-                    <span className="absolute top-2 left-2 rounded-full bg-[#C8A97E] px-2 py-0.5 text-xs font-medium text-black">
+                    <span className="absolute top-2 left-2 rounded-full bg-accent px-2 py-0.5 text-xs font-medium text-inverse">
                       Cover
                     </span>
                   ) : null}
@@ -249,33 +249,33 @@ export function CoverImagePicker({
         )}
 
         {isAutomatic && hasMedia ? (
-          <p className="text-xs text-[#A1A1A6]">Using automatic cover (first photo or video).</p>
+          <p className="ui-helper">Using automatic cover (first photo or video).</p>
         ) : null}
       </div>
 
-      <div className="space-y-6 rounded-3xl border border-neutral-800 bg-[#111111] p-6">
+      <div className="space-y-6 ui-card-padded">
         <div>
-          <h2 className="text-xl font-medium text-[#F5F5F7]">Cover frame</h2>
-          <p className="mt-1 text-sm text-[#A1A1A6]">
+          <h2 className="text-xl font-medium text-foreground">Cover frame</h2>
+          <p className="mt-1 ui-label">
             Customize how the cover is cropped on collection previews.
           </p>
         </div>
 
         {!previewCoverUrl ? (
-          <p className="text-sm text-[#A1A1A6]">
+          <p className="ui-label">
             Add a cover image first, then adjust the frame.
           </p>
         ) : (
           <div className="grid gap-8 lg:grid-cols-[1fr_280px]">
             <div className="space-y-6">
               <label className="block space-y-2">
-                <span className="text-sm text-[#A1A1A6]">Aspect ratio</span>
+                <span className="ui-label">Aspect ratio</span>
                 <select
                   value={coverAspectRatio}
                   onChange={(event) =>
                     setCoverAspectRatio(event.target.value as CoverAspectRatio)
                   }
-                  className="w-full rounded-xl border border-neutral-800 bg-[#0F0F0F] px-4 py-3 text-[#F5F5F7] outline-none transition focus:border-[#C8A97E]"
+                  className="ui-input"
                 >
                   {COVER_ASPECT_RATIO_OPTIONS.map((option) => (
                     <option key={option.value} value={option.value}>
@@ -286,11 +286,11 @@ export function CoverImagePicker({
               </label>
 
               <div className="space-y-2">
-                <span className="text-sm text-[#A1A1A6]">
+                <span className="ui-label">
                   Focal point — click the image to set crop focus
                 </span>
                 <div
-                  className="relative mx-auto w-full max-w-xl cursor-crosshair overflow-hidden rounded-2xl border border-neutral-800 bg-[#1A1A1A]"
+                  className="relative mx-auto w-full max-w-xl cursor-crosshair overflow-hidden rounded-2xl border border-border bg-media"
                   style={{ aspectRatio: coverAspectRatioToCss(coverAspectRatio) }}
                   onClick={(event) =>
                     setFocalFromPointer(event, event.currentTarget)
@@ -305,7 +305,7 @@ export function CoverImagePicker({
                     sizes="(max-width: 768px) 100vw, 480px"
                   />
                   <span
-                    className="pointer-events-none absolute h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-[#C8A97E] bg-[#C8A97E]/30 shadow-[0_0_0_2px_rgba(0,0,0,0.5)]"
+                    className="pointer-events-none absolute h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-accent bg-accent/30 shadow-[0_0_0_2px_rgba(0,0,0,0.5)]"
                     style={{ left: `${coverFocalX}%`, top: `${coverFocalY}%` }}
                   />
                 </div>
@@ -313,7 +313,7 @@ export function CoverImagePicker({
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <label className="block space-y-2">
-                  <span className="text-sm text-[#A1A1A6]">Horizontal focus ({coverFocalX}%)</span>
+                  <span className="ui-label">Horizontal focus ({coverFocalX}%)</span>
                   <input
                     type="range"
                     min={0}
@@ -322,11 +322,11 @@ export function CoverImagePicker({
                     onChange={(event) =>
                       setCoverFocalX(clampFocalPoint(Number(event.target.value)))
                     }
-                    className="w-full accent-[#C8A97E]"
+                    className="w-full accent-accent"
                   />
                 </label>
                 <label className="block space-y-2">
-                  <span className="text-sm text-[#A1A1A6]">Vertical focus ({coverFocalY}%)</span>
+                  <span className="ui-label">Vertical focus ({coverFocalY}%)</span>
                   <input
                     type="range"
                     min={0}
@@ -335,14 +335,14 @@ export function CoverImagePicker({
                     onChange={(event) =>
                       setCoverFocalY(clampFocalPoint(Number(event.target.value)))
                     }
-                    className="w-full accent-[#C8A97E]"
+                    className="w-full accent-accent"
                   />
                 </label>
               </div>
             </div>
 
             <div className="space-y-3">
-              <span className="text-sm text-[#A1A1A6]">Live preview</span>
+              <span className="ui-label">Live preview</span>
               <CollectionPreview
                 slug="#"
                 title={collectionTitle}
@@ -363,7 +363,7 @@ export function CoverImagePicker({
             type="button"
             disabled={frameLoading || !previewCoverUrl || !frameDirty}
             onClick={saveFrame}
-            className="rounded-xl border border-[#C8A97E] px-6 py-3 font-medium text-[#F5F5F7] transition hover:bg-[#C8A97E] hover:text-black disabled:opacity-60"
+            className="ui-btn-primary"
           >
             {frameLoading ? "Saving frame..." : "Save frame"}
           </button>
@@ -371,14 +371,14 @@ export function CoverImagePicker({
             type="button"
             disabled={frameLoading || !previewCoverUrl}
             onClick={resetFrame}
-            className="rounded-xl border border-neutral-700 px-6 py-3 text-[#A1A1A6] transition hover:text-[#F5F5F7] disabled:opacity-60"
+            className="ui-btn-ghost-lg"
           >
             Reset to default
           </button>
         </div>
       </div>
 
-      {error ? <p className="text-sm text-red-400">{error}</p> : null}
+      {error ? <p className="ui-error">{error}</p> : null}
     </div>
   );
 }

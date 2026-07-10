@@ -28,38 +28,38 @@ export default async function AdminLayout({
 
   return (
     <SessionProvider session={session}>
-      <div className="min-h-screen bg-[#050505] text-[#F5F5F7]">
+      <div className="ui-admin-shell">
         {session ? (
-          <header className="border-b border-neutral-800/80">
+          <header className="ui-admin-header">
             <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
               <div className="flex items-center gap-6">
-                <Link href="/admin" className="font-medium text-[#C8A97E]">
+                <Link href="/admin" className="font-medium text-accent">
                   {settings.siteTitle} Admin
                 </Link>
-                <nav className="flex gap-4 text-sm text-[#A1A1A6]">
-                  <Link href="/admin" className="hover:text-[#F5F5F7]">
+                <nav className="flex gap-4 ui-label">
+                  <Link href="/admin" className="hover:text-foreground">
                     Dashboard
                   </Link>
-                  <Link href="/admin/collections" className="hover:text-[#F5F5F7]">
+                  <Link href="/admin/collections" className="hover:text-foreground">
                     Collections
                   </Link>
-                  <Link href="/admin/categories" className="hover:text-[#F5F5F7]">
+                  <Link href="/admin/categories" className="hover:text-foreground">
                     Categories
                   </Link>
-                  <Link href="/admin/settings" className="hover:text-[#F5F5F7]">
+                  <Link href="/admin/settings" className="hover:text-foreground">
                     Settings
                   </Link>
-                  <Link href="/admin/account" className="hover:text-[#F5F5F7]">
+                  <Link href="/admin/account" className="hover:text-foreground">
                     Account
                   </Link>
-                  <Link href="/" className="hover:text-[#F5F5F7]">
+                  <Link href="/" className="hover:text-foreground">
                     View site
                   </Link>
                 </nav>
               </div>
               <div className="flex items-center gap-4">
                 <AdminCategoriesShortcut />
-                <p className="hidden text-sm text-[#A1A1A6] sm:block">
+                <p className="hidden ui-label sm:block">
                   {session.user?.email}
                 </p>
                 <SignOutButton />

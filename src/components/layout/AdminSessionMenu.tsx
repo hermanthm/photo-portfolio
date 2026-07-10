@@ -52,7 +52,7 @@ export function AdminSessionMenu() {
         onClick={() => setOpen((current) => !current)}
         aria-expanded={open}
         aria-haspopup="menu"
-        className="inline-flex items-center gap-2 rounded-full border border-neutral-700/80 bg-[#111111]/90 px-3 py-1.5 text-sm text-[#F5F5F7] transition hover:border-[#C8A97E]/60"
+        className="inline-flex items-center gap-2 rounded-full border border-border-strong/80 bg-surface/90 px-3 py-1.5 text-sm text-foreground transition hover:border-accent/60"
       >
         <span
           className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.8)]"
@@ -64,7 +64,7 @@ export function AdminSessionMenu() {
       {open ? (
         <div
           role="menu"
-          className="absolute right-0 z-50 mt-2 min-w-44 overflow-hidden rounded-xl border border-neutral-800 bg-[#111111]/95 py-1 shadow-lg backdrop-blur-md"
+          className="absolute right-0 z-50 mt-2 min-w-44 overflow-hidden rounded-xl border border-border bg-surface/95 py-1 shadow-lg backdrop-blur-md"
         >
           {adminLinks.map((link) => (
             <Link
@@ -72,7 +72,7 @@ export function AdminSessionMenu() {
               href={link.href}
               role="menuitem"
               onClick={() => setOpen(false)}
-              className="block px-4 py-2 text-sm text-[#A1A1A6] transition hover:bg-[#1A1A1A] hover:text-[#C8A97E]"
+              className="block px-4 py-2 ui-label transition hover:bg-media hover:text-accent"
             >
               {link.label}
             </Link>

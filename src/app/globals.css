@@ -1,12 +1,24 @@
 @import "tailwindcss";
 
+/*
+ * Site theme — edit :root to restyle the entire portfolio.
+ * Components use the ui-* classes below, which read from these tokens.
+ */
 :root {
-  --background: #050505;
-  --foreground: #f5f5f7;
-  --muted: #a1a1a6;
-  --accent: #c8a97e;
-  --surface: #111111;
-  --surface-elevated: #1a1a1a;
+  --background: #ffffff;
+  --foreground: #0a0a0a;
+  --muted: #5c5c5c;
+  --accent: #0a0a0a;
+  --surface: #f5f5f5;
+  --surface-elevated: #fafafa;
+  --border: #e5e5e5;
+  --border-strong: #d4d4d4;
+  --media: #f0f0f0;
+  --inverse: #ffffff;
+  --overlay: #000000;
+  --error: #dc2626;
+  --success: #16a34a;
+  --warning: #d97706;
 }
 
 @theme inline {
@@ -16,6 +28,14 @@
   --color-accent: var(--accent);
   --color-surface: var(--surface);
   --color-surface-elevated: var(--surface-elevated);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-media: var(--media);
+  --color-inverse: var(--inverse);
+  --color-overlay: var(--overlay);
+  --color-error: var(--error);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -27,6 +47,179 @@ body {
 }
 
 ::selection {
-  background: color-mix(in srgb, var(--accent) 35%, transparent);
+  background: color-mix(in srgb, var(--foreground) 12%, transparent);
 }
 
+@layer components {
+  .ui-label {
+    @apply text-sm text-muted;
+  }
+
+  .ui-helper {
+    @apply text-xs text-muted;
+  }
+
+  .ui-eyebrow {
+    @apply text-sm uppercase tracking-[0.2em] text-accent;
+  }
+
+  .ui-page-title {
+    @apply text-5xl font-medium tracking-[-0.04em] text-foreground md:text-6xl;
+  }
+
+  .ui-section-title {
+    @apply text-4xl font-medium tracking-[-0.04em] text-foreground md:text-5xl;
+  }
+
+  .ui-hero-title {
+    @apply max-w-4xl text-5xl leading-tight font-medium tracking-[-0.04em] text-foreground md:text-7xl lg:text-8xl;
+  }
+
+  .ui-body-lg {
+    @apply text-lg leading-relaxed text-muted;
+  }
+
+  .ui-input {
+    @apply w-full rounded-xl border border-border bg-surface-elevated px-4 py-3 text-foreground outline-none transition focus:border-accent;
+  }
+
+  .ui-textarea {
+    @apply w-full rounded-xl border border-border bg-surface-elevated px-4 py-3 text-foreground outline-none transition focus:border-accent;
+  }
+
+  .ui-card {
+    @apply rounded-3xl border border-border bg-surface;
+  }
+
+  .ui-card-padded {
+    @apply rounded-3xl border border-border bg-surface p-6;
+  }
+
+  .ui-card-padded-lg {
+    @apply rounded-3xl border border-border bg-surface p-8;
+  }
+
+  .ui-btn-primary {
+    @apply rounded-xl border border-accent px-6 py-3 font-medium text-foreground transition hover:bg-accent hover:text-inverse disabled:opacity-60;
+  }
+
+  .ui-btn-primary-full {
+    @apply w-full rounded-xl border border-accent px-4 py-3 font-medium text-foreground transition hover:bg-accent hover:text-inverse disabled:opacity-60;
+  }
+
+  .ui-btn-secondary {
+    @apply rounded-full border border-border-strong px-4 py-2 text-sm text-muted transition hover:text-foreground;
+  }
+
+  .ui-btn-secondary-lg {
+    @apply rounded-full border border-border-strong px-5 py-2 text-sm text-foreground transition hover:bg-accent hover:text-inverse;
+  }
+
+  .ui-btn-ghost {
+    @apply rounded-xl border border-border-strong px-4 py-2 text-sm text-muted transition hover:text-foreground disabled:opacity-50;
+  }
+
+  .ui-btn-ghost-lg {
+    @apply rounded-xl border border-border-strong px-6 py-3 text-muted transition hover:text-foreground disabled:opacity-60;
+  }
+
+  .ui-btn-danger {
+    @apply rounded-xl border border-error/40 px-4 py-2 text-sm text-error transition hover:bg-error/10 disabled:opacity-60;
+  }
+
+  .ui-btn-danger-lg {
+    @apply rounded-xl border border-error/40 px-5 py-2 text-sm text-error transition hover:bg-error/10;
+  }
+
+  .ui-pill-primary {
+    @apply rounded-full border border-accent px-8 py-3 text-foreground transition hover:bg-accent hover:text-inverse;
+  }
+
+  .ui-pill-ghost {
+    @apply rounded-full px-8 py-3 text-muted transition hover:text-accent;
+  }
+
+  .ui-badge {
+    @apply rounded-full border border-border-strong px-3 py-1 text-xs text-muted;
+  }
+
+  .ui-badge-accent {
+    @apply rounded-full border border-foreground/20 bg-foreground/5 px-2.5 py-0.5 text-xs text-accent;
+  }
+
+  .ui-error {
+    @apply text-sm text-error;
+  }
+
+  .ui-success {
+    @apply text-sm text-success;
+  }
+
+  .ui-warning {
+    @apply text-sm text-warning;
+  }
+
+  .ui-alert-warning {
+    @apply rounded-2xl border border-warning/30 bg-warning/10 px-4 py-3 text-sm text-warning;
+  }
+
+  .ui-media-placeholder {
+    @apply bg-media;
+  }
+
+  .ui-nav-header {
+    @apply fixed inset-x-0 top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur-md;
+  }
+
+  .ui-nav-text {
+    @apply text-sm text-muted;
+  }
+
+  .ui-nav-link {
+    @apply transition hover:text-accent;
+  }
+
+  .ui-nav-mobile-panel {
+    @apply fixed inset-x-0 top-[73px] z-50 border-b border-border/60 bg-background/95 px-6 py-4 backdrop-blur-md;
+  }
+
+  .ui-nav-mobile-link {
+    @apply block rounded-xl px-4 py-3 text-base transition;
+  }
+
+  .ui-nav-mobile-link-active {
+    @apply bg-surface text-accent;
+  }
+
+  .ui-nav-mobile-link-idle {
+    @apply text-muted hover:bg-surface hover:text-foreground;
+  }
+
+  .ui-control-overlay {
+    @apply rounded-full border border-inverse/30 bg-overlay/60 px-4 py-3 text-inverse transition hover:border-inverse hover:bg-overlay/80;
+  }
+
+  .ui-progress-track {
+    @apply h-2 overflow-hidden rounded-full bg-border;
+  }
+
+  .ui-progress-bar {
+    @apply h-full rounded-full bg-accent transition-all duration-300;
+  }
+
+  .ui-admin-shell {
+    @apply min-h-screen bg-background text-foreground;
+  }
+
+  .ui-admin-header {
+    @apply border-b border-border/80;
+  }
+
+  .ui-login-shell {
+    @apply flex min-h-screen items-center justify-center px-6;
+  }
+
+  .ui-login-card {
+    @apply w-full max-w-md rounded-3xl border border-border bg-surface p-8;
+  }
+}

@@ -16,10 +16,10 @@ export function Footer({
   youtube,
 }: FooterProps) {
   return (
-    <footer className="border-t border-neutral-800/80 bg-[#050505]">
-      <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-10 text-sm text-[#A1A1A6] md:flex-row md:items-center md:justify-between">
+    <footer className="border-t border-border/80 bg-background">
+      <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-10 ui-label md:flex-row md:items-center md:justify-between">
         <div>
-          <p className="text-[#F5F5F7]">{siteTitle}</p>
+          <p className="text-foreground">{siteTitle}</p>
           {footerTagline ? (
             <p className="mt-2 max-w-md">{footerTagline}</p>
           ) : null}

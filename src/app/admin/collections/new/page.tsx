@@ -11,7 +11,7 @@ export default async function NewCollectionPage() {
     <div className="mx-auto max-w-4xl px-6 py-12">
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="mb-2 text-sm uppercase tracking-[0.2em] text-[#C8A97E]">
+          <p className="mb-2 ui-eyebrow">
             Collections
           </p>
           <h1 className="text-4xl font-medium">New collection</h1>
@@ -20,7 +20,7 @@ export default async function NewCollectionPage() {
           <AdminCategoriesShortcut />
           <Link
             href="/admin/collections"
-            className="rounded-full border border-neutral-700 px-4 py-2 text-sm text-[#A1A1A6] transition hover:text-[#F5F5F7]"
+            className="ui-btn-secondary"
           >
             All collections
           </Link>

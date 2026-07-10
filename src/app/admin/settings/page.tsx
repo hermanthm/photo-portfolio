@@ -16,11 +16,11 @@ export default async function AdminSettingsPage() {
     <div className="mx-auto max-w-3xl px-6 py-12">
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="mb-2 text-sm uppercase tracking-[0.2em] text-[#C8A97E]">
+          <p className="mb-2 ui-eyebrow">
             Site
           </p>
           <h1 className="text-4xl font-medium">Settings</h1>
-          <p className="mt-3 text-[#A1A1A6]">
+          <p className="mt-3 text-muted">
             Update your portfolio title, bio, contact details, and social links.
           </p>
         </div>
@@ -28,13 +28,13 @@ export default async function AdminSettingsPage() {
           <AdminCategoriesShortcut />
           <Link
             href="/about"
-            className="rounded-full border border-neutral-700 px-4 py-2 text-[#A1A1A6] transition hover:text-[#F5F5F7]"
+            className="rounded-full border border-border-strong px-4 py-2 text-muted transition hover:text-foreground"
           >
             View About
           </Link>
           <Link
             href="/contact"
-            className="rounded-full border border-neutral-700 px-4 py-2 text-[#A1A1A6] transition hover:text-[#F5F5F7]"
+            className="rounded-full border border-border-strong px-4 py-2 text-muted transition hover:text-foreground"
           >
             View Contact
           </Link>
@@ -46,6 +46,7 @@ export default async function AdminSettingsPage() {
           initialValues={{
             siteTitle: settings.siteTitle,
             bio: settings.bio ?? "",
+            aboutContent: settings.aboutContent ?? "",
             footerTagline: settings.footerTagline ?? "",
             contactBlurb: settings.contactBlurb ?? "",
             contactEmail: settings.contactEmail ?? "",

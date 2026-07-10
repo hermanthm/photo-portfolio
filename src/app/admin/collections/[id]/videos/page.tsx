@@ -20,7 +20,7 @@ export default async function CollectionVideosPage({ params }: VideosPageProps) 
   return (
     <div className="mx-auto max-w-6xl px-6 py-12">
       <div className="mb-8">
-        <p className="mb-2 text-sm uppercase tracking-[0.2em] text-[#C8A97E]">
+        <p className="mb-2 ui-eyebrow">
           {collection.title}
         </p>
         <h1 className="text-4xl font-medium">Videos</h1>
@@ -28,13 +28,13 @@ export default async function CollectionVideosPage({ params }: VideosPageProps) 
           <AdminCategoriesShortcut />
           <Link
             href={`/admin/collections/${collection.id}/edit`}
-            className="text-[#A1A1A6] transition hover:text-[#F5F5F7]"
+            className="text-muted transition hover:text-foreground"
           >
             Back to edit
           </Link>
           <Link
             href={`/admin/collections/${collection.id}/photos`}
-            className="text-[#A1A1A6] transition hover:text-[#F5F5F7]"
+            className="text-muted transition hover:text-foreground"
           >
             Manage photos
           </Link>

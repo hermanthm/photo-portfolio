@@ -15,7 +15,7 @@ export default async function AdminCollectionsPage() {
     <div className="mx-auto max-w-6xl px-6 py-12">
       <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="mb-2 text-sm uppercase tracking-[0.2em] text-[#C8A97E]">
+          <p className="mb-2 ui-eyebrow">
             Collections
           </p>
           <h1 className="text-4xl font-medium">Manage collections</h1>
@@ -24,7 +24,7 @@ export default async function AdminCollectionsPage() {
           <AdminCategoriesShortcut />
           <Link
             href="/admin/collections/new"
-            className="rounded-full border border-[#C8A97E] px-5 py-2 text-[#F5F5F7] transition hover:bg-[#C8A97E] hover:text-black"
+            className="rounded-full border border-accent px-5 py-2 text-foreground transition hover:bg-accent hover:text-inverse"
           >
             New collection
           </Link>
@@ -32,7 +32,7 @@ export default async function AdminCollectionsPage() {
       </div>
 
       {collections.length === 0 ? (
-        <div className="rounded-3xl border border-neutral-800 bg-[#111111] p-8 text-[#A1A1A6]">
+        <div className="ui-card-padded-lg text-muted">
           No collections yet. Create your first collection to get started.
         </div>
       ) : (

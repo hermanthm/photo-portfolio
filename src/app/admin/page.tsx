@@ -24,12 +24,12 @@ export default async function AdminDashboardPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-12">
-      <p className="mb-2 text-sm uppercase tracking-[0.2em] text-[#C8A97E]">
+      <p className="mb-2 ui-eyebrow">
         Dashboard
       </p>
       <h1 className="mb-2 text-4xl font-medium">Welcome back, {displayName}</h1>
-      <p className="mb-10 text-[#A1A1A6]">
-        Managing <span className="text-[#F5F5F7]">{settings.siteTitle}</span>
+      <p className="mb-10 text-muted">
+        Managing <span className="text-foreground">{settings.siteTitle}</span>
       </p>
 
       <div className="grid gap-6 md:grid-cols-3">
@@ -38,41 +38,41 @@ export default async function AdminDashboardPage() {
         <StatCard label="Videos" value={videoCount} />
       </div>
 
-      <div className="mt-12 rounded-3xl border border-neutral-800 bg-[#111111] p-8">
+      <div className="mt-12 ui-card-padded-lg">
         <h2 className="mb-3 text-2xl font-medium">{settings.siteTitle}</h2>
-        <p className="mb-2 max-w-2xl text-[#A1A1A6]">{summary}</p>
-        <p className="mb-6 text-sm text-[#A1A1A6]">
+        <p className="mb-2 max-w-2xl text-muted">{summary}</p>
+        <p className="mb-6 ui-label">
           {publishedCount} of {collectionCount} collections published
         </p>
         <div className="flex flex-wrap gap-4 text-sm">
           <Link
             href="/admin/collections"
-            className="rounded-full border border-[#C8A97E] px-5 py-2 text-[#F5F5F7] transition hover:bg-[#C8A97E] hover:text-black"
+            className="rounded-full border border-accent px-5 py-2 text-foreground transition hover:bg-accent hover:text-inverse"
           >
             Manage collections
           </Link>
           <AdminCategoriesShortcut />
           <Link
             href="/admin/settings"
-            className="rounded-full border border-neutral-700 px-5 py-2 text-[#A1A1A6] transition hover:text-[#F5F5F7]"
+            className="rounded-full border border-border-strong px-5 py-2 text-muted transition hover:text-foreground"
           >
             Site settings
           </Link>
           <Link
             href="/admin/account"
-            className="rounded-full border border-neutral-700 px-5 py-2 text-[#A1A1A6] transition hover:text-[#F5F5F7]"
+            className="rounded-full border border-border-strong px-5 py-2 text-muted transition hover:text-foreground"
           >
             Account
           </Link>
           <Link
             href="/admin/collections/new"
-            className="rounded-full border border-neutral-700 px-5 py-2 text-[#A1A1A6] transition hover:text-[#F5F5F7]"
+            className="rounded-full border border-border-strong px-5 py-2 text-muted transition hover:text-foreground"
           >
             New collection
           </Link>
           <Link
             href="/"
-            className="rounded-full border border-neutral-700 px-5 py-2 text-[#A1A1A6] transition hover:text-[#F5F5F7]"
+            className="rounded-full border border-border-strong px-5 py-2 text-muted transition hover:text-foreground"
           >
             View public site
           </Link>
@@ -84,9 +84,9 @@ export default async function AdminDashboardPage() {
 
 function StatCard({ label, value }: { label: string; value: number }) {
   return (
-    <div className="rounded-3xl border border-neutral-800 bg-[#111111] p-6">
-      <p className="mb-2 text-sm text-[#A1A1A6]">{label}</p>
-      <p className="text-4xl font-medium text-[#C8A97E]">{value}</p>
+    <div className="ui-card-padded">
+      <p className="mb-2 ui-label">{label}</p>
+      <p className="text-4xl font-medium text-accent">{value}</p>
     </div>
   );
 }

@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 import { publicNavLinks } from "@/lib/nav-links";
+import { ui } from "@/lib/ui";
 
 export function MobileNav() {
   const pathname = usePathname();
@@ -49,7 +50,7 @@ export function MobileNav() {
         aria-expanded={open}
         aria-controls="mobile-nav-menu"
         aria-label={open ? "Close menu" : "Open menu"}
-        className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-neutral-700/80 bg-[#111111]/90 text-[#F5F5F7] transition hover:border-[#C8A97E]/60"
+        className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border-strong/80 bg-surface/90 text-foreground transition hover:border-accent/60"
       >
         {open ? (
           <svg
@@ -79,14 +80,11 @@ export function MobileNav() {
       {open ? (
         <>
           <div
-            className="fixed inset-0 top-[73px] z-40 bg-black/50 backdrop-blur-[2px]"
+            className="fixed inset-0 top-[73px] z-40 bg-overlay/50 backdrop-blur-[2px]"
             aria-hidden="true"
             onClick={() => setOpen(false)}
           />
-          <nav
-            id="mobile-nav-menu"
-            className="fixed inset-x-0 top-[73px] z-50 border-b border-neutral-800/60 bg-[#050505]/95 px-6 py-4 backdrop-blur-md"
-          >
+          <nav id="mobile-nav-menu" className={ui.navMobilePanel}>
             <ul className="space-y-1">
               {publicNavLinks.map((link) => {
                 const isActive =
@@ -98,10 +96,10 @@ export function MobileNav() {
                     <Link
                       href={link.href}
                       onClick={() => setOpen(false)}
-                      className={`block rounded-xl px-4 py-3 text-base transition ${
+                      className={`${ui.navMobileLink} ${
                         isActive
-                          ? "bg-[#1A1A1A] text-[#C8A97E]"
-                          : "text-[#A1A1A6] hover:bg-[#1A1A1A] hover:text-[#F5F5F7]"
+                          ? ui.navMobileLinkActive
+                          : ui.navMobileLinkIdle
                       }`}
                     >
                       {link.label}
