@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { PhotoProtection } from "@/components/gallery/PhotoProtection";
 import type { GalleryPhoto, GalleryVideo } from "@/components/gallery/types";
+import { isAllowedEmbedUrl } from "@/lib/video";
 
 type Slide =
   | { type: "photo"; photo: GalleryPhoto }
@@ -80,14 +81,19 @@ export function MediaSlideshow({
                 priority
               />
             </PhotoProtection>
-          ) : (
+          ) : isAllowedEmbedUrl(current.video.embedUrl) ? (
             <iframe
               src={current.video.embedUrl}
               title={current.video.title}
               className="h-full w-full"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
+              sandbox="allow-scripts allow-same-origin allow-presentation"
             />
+          ) : (
+            <div className="flex h-full items-center justify-center px-6 text-center text-[#A1A1A6]">
+              This video cannot be displayed.
+            </div>
           )}
         </div>
 

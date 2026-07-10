@@ -3,6 +3,13 @@ export type VideoProvider = "youtube" | "vimeo" | "other";
 const YOUTUBE_VIDEO_ID_PATTERN =
   /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/i;
 
+export class UnsupportedVideoUrlError extends Error {
+  constructor() {
+    super("Only YouTube and Vimeo URLs are supported");
+    this.name = "UnsupportedVideoUrlError";
+  }
+}
+
 export function detectVideoProvider(url: string): VideoProvider {
   if (/youtube\.com|youtu\.be/i.test(url)) {
     return "youtube";
@@ -11,6 +18,10 @@ export function detectVideoProvider(url: string): VideoProvider {
     return "vimeo";
   }
   return "other";
+}
+
+export function isSupportedVideoUrl(url: string): boolean {
+  return detectVideoProvider(url) !== "other";
 }
 
 export function extractYoutubeVideoId(url: string): string | null {
@@ -67,5 +78,25 @@ export function toEmbedUrl(url: string): string {
     return `https://player.vimeo.com/video/${vimeoMatch[1]}`;
   }
 
-  return trimmed;
+  throw new UnsupportedVideoUrlError();
+}
+
+export function isAllowedEmbedUrl(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    if (parsed.protocol !== "https:") {
+      return false;
+    }
+
+    return (
+      (parsed.hostname === "www.youtube.com" &&
+        parsed.pathname.startsWith("/embed/")) ||
+      (parsed.hostname === "www.youtube-nocookie.com" &&
+        parsed.pathname.startsWith("/embed/")) ||
+      (parsed.hostname === "player.vimeo.com" &&
+        parsed.pathname.startsWith("/video/"))
+    );
+  } catch {
+    return false;
+  }
 }

@@ -2,7 +2,12 @@ import { NextResponse } from "next/server";
 
 import { requireAuth } from "@/lib/auth-guard";
 import { db } from "@/lib/db";
-import { detectVideoProvider, resolveVideoThumbnail, toEmbedUrl } from "@/lib/video";
+import {
+  UnsupportedVideoUrlError,
+  detectVideoProvider,
+  resolveVideoThumbnail,
+  toEmbedUrl,
+} from "@/lib/video";
 import { videoUpdateSchema } from "@/lib/validations/video";
 
 type RouteContext = {
@@ -39,7 +44,15 @@ export async function PATCH(request: Request, context: RouteContext) {
   if (parsed.data.sortOrder !== undefined) data.sortOrder = parsed.data.sortOrder;
 
   if (parsed.data.url) {
-    data.embedUrl = toEmbedUrl(parsed.data.url);
+    try {
+      data.embedUrl = toEmbedUrl(parsed.data.url);
+    } catch (error) {
+      if (error instanceof UnsupportedVideoUrlError) {
+        return NextResponse.json({ error: error.message }, { status: 400 });
+      }
+      throw error;
+    }
+
     data.provider = detectVideoProvider(parsed.data.url);
 
     if (parsed.data.thumbnailUrl === undefined) {

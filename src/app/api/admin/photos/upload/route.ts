@@ -6,6 +6,10 @@ import {
   uploadPhoto,
 } from "@/lib/cloudinary";
 import { db } from "@/lib/db";
+import {
+  validateImageBuffer,
+  validateImageFile,
+} from "@/lib/upload-validation";
 
 export async function POST(request: Request) {
   const { error } = await requireAuth();
@@ -31,6 +35,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "file is required" }, { status: 400 });
   }
 
+  const fileValidationError = validateImageFile(file);
+  if (fileValidationError) {
+    return NextResponse.json({ error: fileValidationError }, { status: 400 });
+  }
+
   const collection = await db.collection.findUnique({
     where: { id: collectionId },
     include: { photos: { select: { sortOrder: true } } },
@@ -41,6 +50,11 @@ export async function POST(request: Request) {
   }
 
   const buffer = Buffer.from(await file.arrayBuffer());
+  const bufferValidationError = validateImageBuffer(buffer);
+  if (bufferValidationError) {
+    return NextResponse.json({ error: bufferValidationError }, { status: 400 });
+  }
+
   const folder = `portfolio/${collection.slug}`;
   const upload = await uploadPhoto(buffer, folder);
 

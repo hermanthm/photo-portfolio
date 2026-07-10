@@ -4,6 +4,10 @@ import { NextResponse } from "next/server";
 import { requireAuth } from "@/lib/auth-guard";
 import { isCloudinaryConfigured, uploadPhoto } from "@/lib/cloudinary";
 import { updateOgImageUrl } from "@/lib/site";
+import {
+  validateImageBuffer,
+  validateImageFile,
+} from "@/lib/upload-validation";
 
 export async function POST(request: Request) {
   const { error } = await requireAuth();
@@ -23,7 +27,16 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "file is required" }, { status: 400 });
   }
 
+  const fileValidationError = validateImageFile(file);
+  if (fileValidationError) {
+    return NextResponse.json({ error: fileValidationError }, { status: 400 });
+  }
+
   const buffer = Buffer.from(await file.arrayBuffer());
+  const bufferValidationError = validateImageBuffer(buffer);
+  if (bufferValidationError) {
+    return NextResponse.json({ error: bufferValidationError }, { status: 400 });
+  }
   const upload = await uploadPhoto(buffer, "portfolio/og");
   const settings = await updateOgImageUrl(upload.secure_url);
 

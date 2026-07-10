@@ -4,10 +4,12 @@ import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FormEvent, useState } from "react";
 
+import { getSafeRedirectUrl } from "@/lib/safe-redirect";
+
 export function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") ?? "/admin";
+  const callbackUrl = getSafeRedirectUrl(searchParams.get("callbackUrl"));
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,7 +30,11 @@ export function LoginForm() {
     setLoading(false);
 
     if (result?.error) {
-      setError("Invalid email or password.");
+      setError(
+        result.status === 429
+          ? "Too many login attempts. Please try again later."
+          : "Invalid email or password.",
+      );
       return;
     }
 

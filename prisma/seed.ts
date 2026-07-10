@@ -39,9 +39,32 @@ const PLACEHOLDER_PHOTOS = [
   },
 ];
 
+function resolveAdminPassword(): string {
+  const password = process.env.ADMIN_PASSWORD;
+
+  if (!password) {
+    if (process.env.NODE_ENV === "production") {
+      throw new Error(
+        "ADMIN_PASSWORD must be set before seeding in production.",
+      );
+    }
+
+    console.warn(
+      "Warning: Using development-only default ADMIN_PASSWORD. Set ADMIN_PASSWORD in .env.",
+    );
+    return "changeme123";
+  }
+
+  if (password.length < 12) {
+    throw new Error("ADMIN_PASSWORD must be at least 12 characters.");
+  }
+
+  return password;
+}
+
 async function main() {
   const adminEmail = process.env.ADMIN_EMAIL ?? "admin@portfolio.local";
-  const adminPassword = process.env.ADMIN_PASSWORD ?? "changeme123";
+  const adminPassword = resolveAdminPassword();
   const passwordHash = await bcrypt.hash(adminPassword, 12);
 
   await db.user.upsert({

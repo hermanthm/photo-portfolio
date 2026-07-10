@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { headers } from "next/headers";
+import { notFound } from "next/navigation";
 
 import { AdminCategoriesShortcut } from "@/components/admin/AdminCategoriesShortcut";
 import { SignOutButton } from "@/components/admin/SignOutButton";
@@ -11,7 +13,18 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [session, settings] = await Promise.all([auth(), getSiteSettings()]);
+  const [session, settings, headersList] = await Promise.all([
+    auth(),
+    getSiteSettings(),
+    headers(),
+  ]);
+
+  const pathname = headersList.get("x-pathname") ?? "";
+  const isLoginPage = pathname === "/admin/login";
+
+  if (!session && pathname && !isLoginPage) {
+    notFound();
+  }
 
   return (
     <SessionProvider session={session}>

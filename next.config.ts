@@ -1,5 +1,7 @@
 import type { NextConfig } from "next";
 
+import { SECURITY_HEADERS } from "./src/lib/security-headers";
+
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
@@ -20,6 +22,14 @@ const nextConfig: NextConfig = {
         hostname: "i.vimeocdn.com",
       },
     ],
+  },
+  async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: SECURITY_HEADERS,
+      },
+    ];
   },
 };
 
