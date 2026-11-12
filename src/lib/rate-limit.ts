@@ -1,43 +1,62 @@
-type RateLimitEntry = {
-  count: number;
-  resetAt: number;
-};
+import { db } from "@/lib/db";
 
-const buckets = new Map<string, RateLimitEntry>();
-
-export type RateLimitConfig = {
-  maxAttempts: number;
-  windowMs: number;
-};
+const MAX_ATTEMPTS = 10;
+const WINDOW_MS = 15 * 60 * 1000;
 
 export function getClientIp(request: Request): string {
-  const forwarded = request.headers.get("x-forwarded-for");
-  if (forwarded) {
-    return forwarded.split(",")[0]?.trim() || "unknown";
+  const realIp = request.headers.get("x-real-ip")?.trim();
+  if (realIp) {
+    return realIp;
   }
 
-  return request.headers.get("x-real-ip") ?? "unknown";
+  return "local";
 }
 
-export function checkRateLimit(
-  key: string,
-  { maxAttempts, windowMs }: RateLimitConfig,
-): { allowed: boolean; retryAfterSeconds: number } {
-  const now = Date.now();
-  const entry = buckets.get(key);
+export async function assertLoginAllowed(keys: string[]) {
+  const now = new Date();
 
-  if (!entry || now >= entry.resetAt) {
-    buckets.set(key, { count: 1, resetAt: now + windowMs });
-    return { allowed: true, retryAfterSeconds: 0 };
+  const rows = await db.loginAttempt.findMany({
+    where: { key: { in: keys } },
+  });
+
+  const blocked = rows.some(
+    (row) => row.resetAt > now && row.count >= MAX_ATTEMPTS,
+  );
+
+  if (blocked) {
+    return false;
   }
 
-  if (entry.count >= maxAttempts) {
-    return {
-      allowed: false,
-      retryAfterSeconds: Math.ceil((entry.resetAt - now) / 1000),
-    };
-  }
+  return true;
+}
 
-  entry.count += 1;
-  return { allowed: true, retryAfterSeconds: 0 };
+export async function recordLoginFailure(keys: string[]) {
+  const now = new Date();
+  const resetAt = new Date(now.getTime() + WINDOW_MS);
+
+  await Promise.all(
+    keys.map(async (key) => {
+      const row = await db.loginAttempt.findUnique({ where: { key } });
+
+      if (!row || row.resetAt <= now) {
+        await db.loginAttempt.upsert({
+          where: { key },
+          create: { key, count: 1, resetAt },
+          update: { count: 1, resetAt },
+        });
+        return;
+      }
+
+      await db.loginAttempt.update({
+        where: { key },
+        data: { count: { increment: 1 } },
+      });
+    }),
+  );
+}
+
+export async function clearLoginAttempts(keys: string[]) {
+  await db.loginAttempt.deleteMany({
+    where: { key: { in: keys } },
+  });
 }
