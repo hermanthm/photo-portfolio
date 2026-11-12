@@ -24,10 +24,6 @@ export default auth((req) => {
     return response;
   }
 
-  if (isLoginPage && req.auth) {
-    return NextResponse.redirect(new URL("/admin", req.nextUrl.origin));
-  }
-
   if (isAdminRoute) {
     requestHeaders.set("x-pathname", pathname);
   }
