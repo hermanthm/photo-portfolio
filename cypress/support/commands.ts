@@ -16,6 +16,7 @@ Cypress.Commands.add("login", () => {
     cy.session(
       ["admin", email],
       () => {
+        cy.viewport(1280, 800);
         cy.visit("/admin/login");
         cy.contains("label", "Email").find("input").type(email);
         cy.contains("label", "Password")
@@ -25,7 +26,8 @@ Cypress.Commands.add("login", () => {
         cy.location("pathname", { timeout: 15000 }).should((pathname) => {
           expect(pathname, REJECTED_CREDENTIALS).to.eq("/admin");
         });
-        cy.contains("a", "Dashboard").should("be.visible");
+        cy.contains("h1", "Welcome back").should("be.visible");
+        cy.get("header").contains("button", "Admin").should("be.visible");
       },
       {
         cacheAcrossSpecs: true,
