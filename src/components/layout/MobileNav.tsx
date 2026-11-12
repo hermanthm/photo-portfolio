@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
@@ -126,6 +126,15 @@ export function MobileNav() {
                       </Link>
                     </li>
                   ))}
+                  <li>
+                    <button
+                      type="button"
+                      onClick={() => signOut({ callbackUrl: "/admin/login" })}
+                      className={`${ui.navMobileLink} ${ui.navMobileLinkIdle} w-full text-left`}
+                    >
+                      Sign out
+                    </button>
+                  </li>
                 </>
               ) : status === "unauthenticated" ? (
                 <>

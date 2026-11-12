@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
 
 import { adminNavLinks } from "@/lib/nav-links";
@@ -82,6 +82,14 @@ export function AdminSessionMenu() {
               {link.label}
             </Link>
           ))}
+          <button
+            type="button"
+            role="menuitem"
+            onClick={() => signOut({ callbackUrl: "/admin/login" })}
+            className="block w-full px-4 py-2 text-left ui-label transition hover:bg-media hover:text-accent"
+          >
+            Sign out
+          </button>
         </div>
       ) : null}
     </div>
