@@ -31,7 +31,7 @@ export function LoginForm() {
 
     if (result?.error) {
       setError(
-        result.status === 429
+        result.code === "rate_limited" || result.status === 429
           ? "Too many login attempts. Please try again later."
           : "Invalid email or password.",
       );
