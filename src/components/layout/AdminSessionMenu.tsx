@@ -1,16 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
 
-const adminLinks = [
-  { href: "/admin", label: "Dashboard" },
-  { href: "/admin/collections", label: "Collections" },
-  { href: "/admin/categories", label: "Categories" },
-  { href: "/admin/settings", label: "Settings" },
-  { href: "/admin/account", label: "Account" },
-];
+import { adminNavLinks } from "@/lib/nav-links";
 
 export function AdminSessionMenu() {
   const { status } = useSession();
@@ -41,8 +35,19 @@ export function AdminSessionMenu() {
     };
   }, [open]);
 
-  if (status !== "authenticated") {
+  if (status === "loading") {
     return null;
+  }
+
+  if (status !== "authenticated") {
+    return (
+      <Link
+        href="/admin/login"
+        className="inline-flex h-10 shrink-0 items-center rounded-full border border-border-strong/80 bg-surface/90 px-3 text-sm text-foreground transition hover:border-accent/60"
+      >
+        Login
+      </Link>
+    );
   }
 
   return (
@@ -52,7 +57,7 @@ export function AdminSessionMenu() {
         onClick={() => setOpen((current) => !current)}
         aria-expanded={open}
         aria-haspopup="menu"
-        className="inline-flex items-center gap-2 rounded-full border border-border-strong/80 bg-surface/90 px-3 py-1.5 text-sm text-foreground transition hover:border-accent/60"
+        className="inline-flex h-10 shrink-0 items-center gap-2 rounded-full border border-border-strong/80 bg-surface/90 px-3 text-sm text-foreground transition hover:border-accent/60"
       >
         <span
           className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.8)]"
@@ -66,7 +71,7 @@ export function AdminSessionMenu() {
           role="menu"
           className="absolute right-0 z-50 mt-2 min-w-44 overflow-hidden rounded-xl border border-border bg-surface/95 py-1 shadow-lg backdrop-blur-md"
         >
-          {adminLinks.map((link) => (
+          {adminNavLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
@@ -77,6 +82,14 @@ export function AdminSessionMenu() {
               {link.label}
             </Link>
           ))}
+          <button
+            type="button"
+            role="menuitem"
+            onClick={() => signOut({ callbackUrl: "/admin/login" })}
+            className="block w-full px-4 py-2 text-left ui-label transition hover:bg-media hover:text-accent"
+          >
+            Sign out
+          </button>
         </div>
       ) : null}
     </div>
