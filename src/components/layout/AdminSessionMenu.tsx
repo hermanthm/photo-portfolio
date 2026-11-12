@@ -41,8 +41,19 @@ export function AdminSessionMenu() {
     };
   }, [open]);
 
-  if (status !== "authenticated") {
+  if (status === "loading") {
     return null;
+  }
+
+  if (status !== "authenticated") {
+    return (
+      <Link
+        href="/admin/login"
+        className="inline-flex items-center rounded-full border border-border-strong/80 bg-surface/90 px-3 py-1.5 text-sm text-foreground transition hover:border-accent/60"
+      >
+        Login
+      </Link>
+    );
   }
 
   return (
