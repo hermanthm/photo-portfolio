@@ -1,14 +1,21 @@
 "use client";
 
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
-import { publicNavLinks } from "@/lib/nav-links";
+import { adminNavLinks, publicNavLinks } from "@/lib/nav-links";
 import { ui } from "@/lib/ui";
+
+function isCurrent(pathname: string, href: string) {
+  if (href === "/admin") return pathname === "/admin";
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
 
 export function MobileNav() {
   const pathname = usePathname();
+  const { status } = useSession();
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -80,33 +87,64 @@ export function MobileNav() {
       {open ? (
         <>
           <div
-            className="fixed inset-0 top-[73px] z-40 bg-overlay/50 backdrop-blur-[2px]"
+            className="fixed inset-0 top-16 z-40 bg-overlay/50 backdrop-blur-[2px] md:top-[73px]"
             aria-hidden="true"
             onClick={() => setOpen(false)}
           />
           <nav id="mobile-nav-menu" className={ui.navMobilePanel}>
             <ul className="space-y-1">
-              {publicNavLinks.map((link) => {
-                const isActive =
-                  pathname === link.href ||
-                  pathname.startsWith(`${link.href}/`);
-
-                return (
-                  <li key={link.href}>
+              {publicNavLinks.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    onClick={() => setOpen(false)}
+                    className={`${ui.navMobileLink} ${
+                      isCurrent(pathname, link.href)
+                        ? ui.navMobileLinkActive
+                        : ui.navMobileLinkIdle
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+              {status === "authenticated" ? (
+                <>
+                  <li className="my-2 border-t border-border" aria-hidden="true" />
+                  {adminNavLinks.map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        href={link.href}
+                        onClick={() => setOpen(false)}
+                        className={`${ui.navMobileLink} ${
+                          isCurrent(pathname, link.href)
+                            ? ui.navMobileLinkActive
+                            : ui.navMobileLinkIdle
+                        }`}
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </>
+              ) : status === "unauthenticated" ? (
+                <>
+                  <li className="my-2 border-t border-border" aria-hidden="true" />
+                  <li>
                     <Link
-                      href={link.href}
+                      href="/admin/login"
                       onClick={() => setOpen(false)}
                       className={`${ui.navMobileLink} ${
-                        isActive
+                        pathname === "/admin/login"
                           ? ui.navMobileLinkActive
                           : ui.navMobileLinkIdle
                       }`}
                     >
-                      {link.label}
+                      Login
                     </Link>
                   </li>
-                );
-              })}
+                </>
+              ) : null}
             </ul>
           </nav>
         </>
