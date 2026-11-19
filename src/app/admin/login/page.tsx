@@ -1,9 +1,16 @@
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 import { LoginForm } from "@/components/admin/LoginForm";
+import { auth } from "@/lib/auth";
 import { getSiteSettings } from "@/lib/site";
 
 export default async function AdminLoginPage() {
+  const session = await auth();
+  if (session) {
+    redirect("/admin");
+  }
+
   const settings = await getSiteSettings();
 
   return (

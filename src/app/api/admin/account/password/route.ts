@@ -50,7 +50,10 @@ export async function PATCH(request: Request) {
 
   await db.user.update({
     where: { id: user.id },
-    data: { passwordHash },
+    data: {
+      passwordHash,
+      sessionVersion: { increment: 1 },
+    },
   });
 
   return NextResponse.json({ success: true });

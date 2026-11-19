@@ -1,5 +1,6 @@
 "use client";
 
+import { signOut } from "next-auth/react";
 import { FormEvent, useState } from "react";
 
 export function ChangePasswordForm() {
@@ -7,13 +8,11 @@ export function ChangePasswordForm() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
-    setSuccess(false);
 
     if (newPassword !== confirmPassword) {
       setError("New passwords do not match.");
@@ -36,10 +35,7 @@ export function ChangePasswordForm() {
       return;
     }
 
-    setCurrentPassword("");
-    setNewPassword("");
-    setConfirmPassword("");
-    setSuccess(true);
+    await signOut({ callbackUrl: "/admin/login" });
   }
 
   return (
@@ -81,9 +77,6 @@ export function ChangePasswordForm() {
       </label>
 
       {error ? <p className="ui-error">{error}</p> : null}
-      {success ? (
-        <p className="ui-success">Password updated successfully.</p>
-      ) : null}
 
       <button
         type="submit"
